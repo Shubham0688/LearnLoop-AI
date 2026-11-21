@@ -1,132 +1,148 @@
 export default async (req) => {
+  const headers = { "Content-Type": "application/json" };
+
+  const respond = (data, status = 200) =>
+    new Response(JSON.stringify(data), { status, headers });
+
   if (req.method !== "POST") {
-    return new Response(
-      JSON.stringify({ error: "Only POST requests are allowed." }),
-      { status: 405, headers: { "Content-Type": "application/json" } }
-    );
+    return respond({ error: "Only POST requests are allowed." }, 405);
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
   const model = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
 
   if (!apiKey) {
-    return new Response(
-      JSON.stringify({ error: "AI service is not configured." }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    return respond({ error: "AI service is not configured." }, 500);
   }
-
-  const respond = (data, status = 200) =>
-    new Response(JSON.stringify(data), {
-      status,
-      headers: { "Content-Type": "application/json" }
-    });
 
   try {
     const body = await req.json();
-    const { action } = body;
+
+    const {
+      action,
+      subject,
+      topic,
+      grade,
+      educationLevel,
+      format,
+      level,
+      difficulty,
+      learnerProfile,
+      digitalTwin,
+      environment,
+      recentQuestions,
+      question,
+      studentAnswer,
+      answer,
+      expectedAnswer,
+      correctAnswer,
+      explanation,
+      confidence,
+      reasoning
+    } = body;
 
     let prompt = "";
 
     if (action === "generateQuestion") {
-      const {
-        subject,
-        topic,
-        grade,
-        educationLevel,
-        format,
-        difficulty,
-        learnerProfile,
-        recentQuestions
-      } = body;
-
       prompt = `
-You are LearnLoop AI, an adaptive exam preparation tutor.
+You are LearnLoop AI, an advanced adaptive exam-preparation tutor.
 
-Create ONE original educational question using this learner context:
-Education level: ${educationLevel || "School"}
-Class/Year: ${grade || "Not specified"}
+LEARNER CONTEXT
+Education: ${educationLevel || "School"}
+Class/year: ${grade || "Not specified"}
 Subject: ${subject || "General"}
 Topic: ${topic || "General"}
-Requested format: ${format || "MCQ"}
-Difficulty: ${difficulty || "Adaptive"}
+Question format: ${format || "MCQ"}
+Difficulty: ${level || difficulty || "Adaptive"}
 
-Learner profile:
-${JSON.stringify(learnerProfile || {})}
+LEARNER MODEL / DIGITAL TWIN
+${JSON.stringify(digitalTwin || learnerProfile || {})}
 
-Recently asked questions (avoid repeating them):
+STUDY ENVIRONMENT
+${JSON.stringify(environment || { status: "Not provided" })}
+
+RECENT QUESTIONS — AVOID REPETITION
 ${JSON.stringify(recentQuestions || [])}
 
-Adapt the question to the learner's level and topic.
-Use clear, age-appropriate language.
-Make the question meaningful and academically accurate.
-For MCQs, provide exactly four options.
-For numerical questions, include all necessary values and units.
-For other formats, follow the requested format.
+TASK
+1. Generate one original academically accurate question.
+2. Match the learner's level.
+3. Adapt difficulty to available mastery evidence.
+4. Avoid repeating recent questions.
+5. Include a useful hint and clear explanation.
+6. Include one optional real-life transfer challenge.
+7. Do not claim mastery based on insufficient evidence.
+8. Do not use environmental readings as proof of student attention.
 
-Return ONLY valid JSON in this structure:
+For MCQ, provide exactly four options.
+For non-MCQ, provide an empty options array.
+
+Return ONLY valid JSON:
 {
   "question": "Question text",
-  "format": "Question format",
-  "difficulty": "Difficulty level",
-  "options": ["A", "B", "C", "D"],
-  "correctAnswer": "Correct answer",
+  "format": "${format || "MCQ"}",
+  "level": "${level || difficulty || "Foundation"}",
+  "options": ["Option A", "Option B", "Option C", "Option D"],
+  "answer": "Correct answer",
   "explanation": "Simple explanation",
-  "hint": "A helpful hint without revealing the answer",
-  "topic": "Topic name"
+  "hint": "Helpful hint",
+  "topic": "${topic || "General"}",
+  "transferChallenge": "A short real-life application challenge",
+  "decisionReason": "Why this question and difficulty were selected"
 }
-
-If the format is not MCQ, options can be an empty array.
 `;
     } else if (action === "analyze") {
-      const {
-        question,
-        answer,
-        expectedAnswer,
-        explanation,
-        confidence,
-        learnerProfile
-      } = body;
-
       prompt = `
-You are LearnLoop AI, an adaptive exam preparation tutor.
+You are LearnLoop AI, an expert adaptive learning tutor.
 
-Evaluate the student's response.
+LEARNER CONTEXT
+Education: ${educationLevel || "School"}
+Class/year: ${grade || "Not specified"}
+Subject: ${subject || "General"}
+Topic: ${topic || "General"}
 
-Question:
+QUESTION
 ${question || ""}
 
-Student's answer:
-${answer || ""}
+STUDENT ANSWER
+${studentAnswer || answer || ""}
 
-Expected answer:
-${expectedAnswer || "Use your subject knowledge to evaluate."}
+EXPECTED ANSWER
+${expectedAnswer || correctAnswer || "Evaluate independently."}
 
-Reference explanation:
-${explanation || ""}
+STUDENT REASONING
+${reasoning || explanation || "Not provided"}
 
-Student confidence:
+CONFIDENCE
 ${confidence || "Not specified"}
 
-Learner profile:
-${JSON.stringify(learnerProfile || {})}
+DIGITAL TWIN
+${JSON.stringify(digitalTwin || learnerProfile || {})}
 
-Give supportive, accurate and useful feedback.
-Identify whether the answer is correct, partially correct or incorrect.
-Explain the misconception, if any.
-Give one specific improvement suggestion.
-Recommend what the student should practise next.
+STUDY ENVIRONMENT
+${JSON.stringify(environment || { status: "Not provided" })}
 
-Keep the language simple and encouraging.
-Do not claim the answer is correct if it is not.
+TASK
+Provide:
+1. Correctness: correct, partially correct or incorrect.
+2. What the student understood.
+3. Any misconception.
+4. A simple explanation.
+5. One specific improvement suggestion.
+6. The next concept or question difficulty to practise.
+7. Explain why that next step is suitable.
 
-Return concise plain text feedback.
+Use simple, age-appropriate language.
+Do not invent student history or claim unsupported predictions.
+Environmental data must not be treated as proof of concentration.
+Be encouraging but academically honest.
+
+Return concise, structured plain text.
 `;
     } else {
       return respond({ error: "Invalid action." }, 400);
     }
 
-    // Retry temporary Gemini server errors automatically.
     let result = null;
     let lastStatus = 503;
 
@@ -145,7 +161,7 @@ Return concise plain text feedback.
               contents: [{ parts: [{ text: prompt }] }],
               generationConfig: {
                 temperature: 0.7,
-                maxOutputTokens: 1200,
+                maxOutputTokens: 1600,
                 ...(action === "generateQuestion"
                   ? { responseMimeType: "application/json" }
                   : {})
@@ -164,44 +180,41 @@ Return concise plain text feedback.
         }
 
         lastStatus = response.status;
-
         console.error("Gemini API error:", response.status);
 
-        // Retry only temporary errors.
         if (![408, 429, 500, 502, 503, 504].includes(response.status)) {
-          return respond(
-            { error: "AI request failed. Please check your API configuration." },
-            response.status
-          );
+          return respond({
+            error: "AI request failed. Check API configuration."
+          }, response.status);
         }
       } catch (error) {
         clearTimeout(timeout);
         lastStatus = 503;
-        console.error("Gemini request temporarily failed:", error.name);
+        console.error("Gemini request error:", error.name);
       }
 
       if (attempt < 2) {
-        const delay = 800 * Math.pow(2, attempt);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise(resolve =>
+          setTimeout(resolve, 800 * Math.pow(2, attempt))
+        );
       }
     }
 
     if (!result) {
       return respond({
-        error: "Gemini is temporarily busy. Please try again in a minute.",
+        error: "Gemini is temporarily busy. Please try again.",
         retryable: true
-      }, lastStatus >= 500 ? 503 : lastStatus);
+      }, 503);
     }
 
-    const output =
-      result.candidates?.[0]?.content?.parts
-        ?.map(part => part.text || "")
-        .join("")
-        .trim();
+    const output = result.candidates?.[0]?.content?.parts
+      ?.map(part => part.text || "")
+      .join("")
+      .trim();
 
     if (!output) {
       return respond({
-        error: "AI returned an empty response. Please try again.",
+        error: "AI returned an empty response.",
         retryable: true
       }, 502);
     }
@@ -221,9 +234,9 @@ Return concise plain text feedback.
           question: questionData
         });
       } catch {
-        console.error("Gemini returned invalid question JSON.");
+        console.error("Invalid question JSON.");
         return respond({
-          error: "AI could not format the question. Please try again.",
+          error: "AI could not format the question. Please retry.",
           retryable: true
         }, 502);
       }
@@ -236,7 +249,6 @@ Return concise plain text feedback.
 
   } catch (error) {
     console.error("Function error:", error.name);
-
     return respond({
       error: "Something went wrong. Please try again."
     }, 500);
