@@ -1,197 +1,99 @@
 export default async (req) => {
-  const headers = { "Content-Type": "application/json" };
-
-  const respond = (data, status = 200) =>
-    new Response(JSON.stringify(data), { status, headers });
-
   if (req.method !== "POST") {
-    return respond({ error: "Only POST requests are allowed." }, 405);
+    return new Response(
+      JSON.stringify({ success: false, error: "Only POST requests are allowed." }),
+      { status: 405, headers: { "Content-Type": "application/json" } }
+    );
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
+  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
   if (!apiKey) {
-    return respond({ error: "AI service is not configured." }, 500);
+    return json({ success: false, error: "GEMINI_API_KEY is missing in Netlify environment variables." }, 500);
   }
 
   try {
     const body = await req.json();
 
-    const {
-      action,
-      subject,
-      topic,
-      grade,
-      educationLevel,
-      format,
-      level,
-      difficulty,
-      learnerProfile,
-      digitalTwin,
-      environment,
-      recentQuestions,
-      question,
-      studentAnswer,
-      answer,
-      expectedAnswer,
-      correctAnswer,
-      explanation,
-      confidence,
-      reasoning
-    } = body;
-
-    let prompt = "";
-
-    if (action === "generateQuestion") {
-      prompt = `
-You are LearnLoop AI, an advanced adaptive exam-preparation tutor.
-
-LEARNER CONTEXT
-Education: ${educationLevel || "School"}
-Class/year: ${grade || "Not specified"}
-Subject: ${subject || "General"}
-Topic: ${topic || "General"}
-Question format: ${format || "MCQ"}
-Difficulty: ${level || difficulty || "Adaptive"}
-
-LEARNER MODEL / DIGITAL TWIN
-${JSON.stringify(digitalTwin || learnerProfile || {})}
-
-STUDY ENVIRONMENT
-${JSON.stringify(environment || { status: "Not provided" })}
-
-RECENT QUESTIONS — AVOID REPETITION
-${JSON.stringify(recentQuestions || [])}
-
-TASK
-1. Generate one original academically accurate question.
-2. Match the learner's level.
-3. Adapt difficulty to available mastery evidence.
-4. Avoid repeating recent questions.
-5. Include a useful hint and clear explanation.
-6. Include one optional real-life transfer challenge.
-7. Do not claim mastery based on insufficient evidence.
-8. Do not use environmental readings as proof of student attention.
-
-For MCQ, provide exactly four options.
-For non-MCQ, provide an empty options array.
-
-Return ONLY valid JSON:
-{
-  "question": "Question text",
-  "format": "${format || "MCQ"}",
-  "level": "${level || difficulty || "Foundation"}",
-  "options": ["Option A", "Option B", "Option C", "Option D"],
-  "answer": "Correct answer",
-  "explanation": "Simple explanation",
-  "hint": "Helpful hint",
-  "topic": "${topic || "General"}",
-  "transferChallenge": "A short real-life application challenge",
-  "decisionReason": "Why this question and difficulty were selected"
-}
-`;
-    } else if (action === "analyze") {
-      prompt = `
-You are LearnLoop AI, an expert adaptive learning tutor.
-
-LEARNER CONTEXT
-Education: ${educationLevel || "School"}
-Class/year: ${grade || "Not specified"}
-Subject: ${subject || "General"}
-Topic: ${topic || "General"}
-
-QUESTION
-${question || ""}
-
-STUDENT ANSWER
-${studentAnswer || answer || ""}
-
-EXPECTED ANSWER
-${expectedAnswer || correctAnswer || "Evaluate independently."}
-
-STUDENT REASONING
-${reasoning || explanation || "Not provided"}
-
-CONFIDENCE
-${confidence || "Not specified"}
-
-DIGITAL TWIN
-${JSON.stringify(digitalTwin || learnerProfile || {})}
-
-STUDY ENVIRONMENT
-${JSON.stringify(environment || { status: "Not provided" })}
-
-TASK
-Provide:
-1. Correctness: correct, partially correct or incorrect.
-2. What the student understood.
-3. Any misconception.
-4. A simple explanation.
-5. One specific improvement suggestion.
-6. The next concept or question difficulty to practise.
-7. Explain why that next step is suitable.
-
-Use simple, age-appropriate language.
-Do not invent student history or claim unsupported predictions.
-Environmental data must not be treated as proof of concentration.
-Be encouraging but academically honest.
-
-Return concise, structured plain text.
-`;
-    } else {
-      return respond({ error: "Invalid action." }, 400);
+    if (body.action === "generateQuestion") {
+      return await generateQuestion(body, apiKey, model);
     }
 
-    let result = null;
-    let lastStatus = 503;
+    if (body.action === "analyze") {
+      return await analyzeAnswer(body, apiKey, model);
+    }
 
-    for (let attempt = 0; attempt < 3; attempt++) {
+    return json({ success: false, error: "Unknown action." }, 400);
+
+  } catch (error) {
+    console.error("LearnLoop error:", error);
+    return json({
+      success: false,
+      error: error.message || "Something went wrong."
+    }, 500);
+  }
+};
+
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json" }
+  });
+}
+
+async function askGemini(prompt, apiKey, model) {
+  const url =
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+  let lastError;
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 25000);
 
-      try {
-        const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            signal: controller.signal,
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }],
-              generationConfig: {
-                temperature: 0.7,
-                maxOutputTokens: 1600,
-                ...(action === "generateQuestion"
-                  ? { responseMimeType: "application/json" }
-                  : {})
-              }
-            })
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: prompt }]
+          }],
+          generationConfig: {
+            temperature: 0.7,
+            responseMimeType: "application/json"
           }
-        );
+        }),
+        signal: controller.signal
+      });
 
-        clearTimeout(timeout);
+      clearTimeout(timeout);
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (response.ok) {
-          result = data;
-          break;
+      if (!response.ok) {
+        const message =
+          data.error?.message || `Gemini API error: ${response.status}`;
+
+        if ([408, 429, 500, 502, 503, 504].includes(response.status)) {
+          throw new Error(message);
         }
 
-        lastStatus = response.status;
-        console.error("Gemini API error:", response.status);
-
-        if (![408, 429, 500, 502, 503, 504].includes(response.status)) {
-          return respond({
-            error: "AI request failed. Check API configuration."
-          }, response.status);
-        }
-      } catch (error) {
-        clearTimeout(timeout);
-        lastStatus = 503;
-        console.error("Gemini request error:", error.name);
+        throw new Error(message);
       }
+
+      const output =
+        data.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("");
+
+      if (!output) {
+        throw new Error("Gemini returned an empty response.");
+      }
+
+      return parseJSON(output);
+
+    } catch (error) {
+      lastError = error;
 
       if (attempt < 2) {
         await new Promise(resolve =>
@@ -199,58 +101,243 @@ Return concise, structured plain text.
         );
       }
     }
-
-    if (!result) {
-      return respond({
-        error: "Gemini is temporarily busy. Please try again.",
-        retryable: true
-      }, 503);
-    }
-
-    const output = result.candidates?.[0]?.content?.parts
-      ?.map(part => part.text || "")
-      .join("")
-      .trim();
-
-    if (!output) {
-      return respond({
-        error: "AI returned an empty response.",
-        retryable: true
-      }, 502);
-    }
-
-    if (action === "generateQuestion") {
-      try {
-        const cleaned = output
-          .replace(/^```json\s*/i, "")
-          .replace(/^```\s*/i, "")
-          .replace(/\s*```$/, "")
-          .trim();
-
-        const questionData = JSON.parse(cleaned);
-
-        return respond({
-          success: true,
-          question: questionData
-        });
-      } catch {
-        console.error("Invalid question JSON.");
-        return respond({
-          error: "AI could not format the question. Please retry.",
-          retryable: true
-        }, 502);
-      }
-    }
-
-    return respond({
-      success: true,
-      feedback: output
-    });
-
-  } catch (error) {
-    console.error("Function error:", error.name);
-    return respond({
-      error: "Something went wrong. Please try again."
-    }, 500);
   }
-};
+
+  throw lastError || new Error("Gemini request failed.");
+}
+
+function parseJSON(text) {
+  const cleaned = text
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/\s*```$/, "")
+    .trim();
+
+  try {
+    return JSON.parse(cleaned);
+  } catch {
+    const start = cleaned.indexOf("{");
+    const end = cleaned.lastIndexOf("}");
+
+    if (start !== -1 && end > start) {
+      return JSON.parse(cleaned.slice(start, end + 1));
+    }
+
+    throw new Error("AI response could not be read as JSON.");
+  }
+}
+
+function languageInstruction(language) {
+  if (language === "Hindi") {
+    return "Write the explanation in simple Hindi.";
+  }
+
+  if (language === "Bilingual (Hindi + English)") {
+    return "Explain in simple Hindi and English together.";
+  }
+
+  return "Write the explanation in simple English.";
+}
+
+async function generateQuestion(body, apiKey, model) {
+  const {
+    subject = "General",
+    topic = "General",
+    grade = "Class 10",
+    educationLevel = "School",
+    format = "MCQ",
+    learnerProfile = {},
+    recentQuestions = [],
+    textbookStyle = "Indian school textbook / NCERT-CBSE style",
+    language = "English",
+    mathNotation = "",
+    level,
+    difficulty
+  } = body;
+
+  const selectedDifficulty = difficulty || level || "Adaptive";
+
+  const prompt = `
+You are LearnLoop AI, an adaptive exam-preparation tutor.
+
+Create ONE original, accurate educational practice question.
+
+STUDENT DETAILS:
+Education: ${educationLevel}
+Class / Year: ${grade}
+Subject: ${subject}
+Topic: ${topic}
+Question format: ${format}
+Difficulty: ${selectedDifficulty}
+Textbook preference: ${textbookStyle}
+Language: ${language}
+
+LEARNER MODEL:
+${JSON.stringify(learnerProfile)}
+
+RECENT QUESTIONS TO AVOID REPEATING:
+${JSON.stringify(recentQuestions)}
+
+MATHEMATICAL NOTATION:
+${mathNotation}
+
+INSTRUCTIONS:
+1. Match the student's class and educational level.
+2. Follow the requested textbook style.
+3. Use standard Indian school mathematical notation where relevant:
+   ×, ÷, √, π, ∠, △, ∥, ≤, ≥, fractions, powers and proper equations.
+4. Make the question conceptually correct and unambiguous.
+5. Do not repeat a recent question.
+6. Match the requested question format.
+7. For MCQs, provide exactly four options.
+8. For numerical questions, include units wherever needed.
+9. Give a useful hint without revealing the answer.
+10. Give a clear step-by-step explanation.
+11. Keep language appropriate for the student's class.
+12. Explain why this question and difficulty were selected using the learner profile. Do not invent learner history.
+13. If there is insufficient learner data, say the question is a foundation-level starting point.
+
+${languageInstruction(language)}
+
+RETURN ONLY VALID JSON IN THIS FORMAT:
+{
+  "question": "Question text",
+  "format": "${format}",
+  "difficulty": "${selectedDifficulty}",
+  "level": "${selectedDifficulty}",
+  "topic": "${topic}",
+  "options": [],
+  "answer": "Correct answer",
+  "correctAnswer": "Correct answer",
+  "explanation": "Step-by-step explanation",
+  "hint": "Helpful hint",
+  "decisionReason": "Why this question and difficulty were selected"
+}
+`;
+
+  const result = await askGemini(prompt, apiKey, model);
+
+  if (!result.question || !(result.answer || result.correctAnswer)) {
+    throw new Error("AI generated an incomplete question. Please try again.");
+  }
+
+  result.answer = result.answer || result.correctAnswer;
+  result.correctAnswer = result.correctAnswer || result.answer;
+  result.topic = result.topic || topic;
+  result.format = result.format || format;
+  result.difficulty = result.difficulty || selectedDifficulty;
+  result.level = result.level || result.difficulty;
+
+  return json({
+    success: true,
+    question: result
+  });
+}
+
+async function analyzeAnswer(body, apiKey, model) {
+  const {
+    question = "",
+    studentAnswer,
+    answer,
+    expectedAnswer,
+    correctAnswer,
+    explanation = "",
+    confidence = "Medium",
+    learnerProfile = {},
+    subject = "General",
+    topic = "General",
+    grade = "Class 10",
+    language = "English",
+    textbookStyle = "Indian school textbook / NCERT-CBSE style"
+  } = body;
+
+  const submittedAnswer = studentAnswer ?? answer ?? "";
+  const referenceAnswer = expectedAnswer ?? correctAnswer ?? "";
+
+  if (!question || !String(submittedAnswer).trim()) {
+    return json({
+      success: false,
+      error: "Question and student answer are required."
+    }, 400);
+  }
+
+  const prompt = `
+You are LearnLoop AI, an intelligent and supportive exam-preparation tutor.
+
+Evaluate the student's answer fairly and accurately.
+
+QUESTION:
+${question}
+
+STUDENT'S ANSWER:
+${submittedAnswer}
+
+REFERENCE ANSWER:
+${referenceAnswer}
+
+REFERENCE EXPLANATION:
+${explanation}
+
+STUDENT DETAILS:
+Subject: ${subject}
+Topic: ${topic}
+Class / Year: ${grade}
+Textbook style: ${textbookStyle}
+Language: ${language}
+Confidence reported by student: ${confidence}
+
+LEARNER PROFILE:
+${JSON.stringify(learnerProfile)}
+
+INSTRUCTIONS:
+1. Compare the student's answer with the reference answer.
+2. Accept mathematically equivalent answers.
+3. Do not mark an answer incorrect only because its wording differs.
+4. For numerical answers, check the calculation, units and method.
+5. Give partial credit when the main concept or method is correct.
+6. Identify a misconception only when there is evidence.
+7. Explain the correct method in easy steps.
+8. Suggest one useful next learning action.
+9. Do not invent marks, history or learning evidence.
+10. Be encouraging, clear and educational.
+11. Use standard Indian textbook mathematical symbols where relevant.
+12. Follow the requested explanation language.
+
+${languageInstruction(language)}
+
+RETURN ONLY VALID JSON:
+{
+  "verdict": "correct",
+  "feedback": "Evaluation and explanation for the student",
+  "strength": "What the student understood",
+  "misconception": "Observed misconception or None identified",
+  "nextAction": "One recommended learning action"
+}
+
+The verdict must be exactly one of:
+correct, partial, incorrect, reviewed.
+`;
+
+  const result = await askGemini(prompt, apiKey, model);
+
+  const allowed = ["correct", "partial", "incorrect", "reviewed"];
+
+  const verdict = allowed.includes(result.verdict)
+    ? result.verdict
+    : "reviewed";
+
+  const feedback = [
+    `Result: ${verdict.toUpperCase()}`,
+    result.feedback || "Your answer has been reviewed.",
+    result.strength ? `What you understood: ${result.strength}` : "",
+    result.misconception ? `Concept check: ${result.misconception}` : "",
+    result.nextAction ? `Next step: ${result.nextAction}` : ""
+  ].filter(Boolean).join("\n\n");
+
+  return json({
+    success: true,
+    verdict,
+    feedback,
+    analysis: result
+  });
+}
