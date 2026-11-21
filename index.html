@@ -5,182 +5,95 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LearnLoop AI | Adaptive Learning Intelligence</title>
 
+<!-- MathJax: Indian school-style mathematical notation and equations -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)'], ['$','$']],
+    displayMath: [['\\[', '\\]'], ['$$', '$$']],
+    packages: {'[+]': ['ams']}
+  },
+  options: {
+    skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  startup: { typeset: false }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 <style>
 :root{
-  --bg:#f4f6fc;
-  --card:#fff;
-  --ink:#172033;
-  --muted:#738097;
-  --line:#e7ebf3;
-  --blue:#5268e8;
-  --purple:#8058d9;
-  --green:#16a477;
-  --orange:#ed9a38;
-  --red:#df626c;
-  --shadow:0 8px 28px rgba(30,45,90,.07);
+  --bg:#f4f6fc;--card:#fff;--ink:#172033;--muted:#738097;
+  --line:#e7ebf3;--blue:#5268e8;--purple:#8058d9;
+  --green:#16a477;--orange:#ed9a38;--red:#df626c;
+  --shadow:0 8px 28px rgba(30,45,90,.07)
 }
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Inter,Segoe UI,Arial,sans-serif;
-  background:var(--bg);
-  color:var(--ink);
-}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-header{
-  background:#fff;
-  border-bottom:1px solid var(--line);
-  padding:16px 5%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  flex-wrap:wrap;
-}
+header{background:#fff;border-bottom:1px solid var(--line);padding:16px 5%;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px}
-.logo{
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  color:#fff;width:43px;height:43px;border-radius:13px;
-  display:grid;place-items:center;font-size:22px;font-weight:800;
-}
+.logo{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;width:43px;height:43px;border-radius:13px;display:grid;place-items:center;font-size:22px;font-weight:800}
 .brand h2{margin:0;font-size:20px}
 .brand small{color:var(--muted);font-size:10px;letter-spacing:1.5px}
 .header-right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.pill{
-  background:#f0f2ff;color:var(--blue);
-  border-radius:30px;padding:9px 14px;font-size:12px;font-weight:700;
-}
+.pill{background:#f0f2ff;color:var(--blue);border-radius:30px;padding:9px 14px;font-size:12px;font-weight:700}
 main{max-width:1250px;margin:28px auto;padding:0 20px}
-.hero{
-  background:linear-gradient(120deg,#263d92,#7353d3);
-  color:white;padding:30px;border-radius:20px;
-  display:flex;justify-content:space-between;gap:20px;
-  align-items:center;flex-wrap:wrap;margin-bottom:22px;
-}
+.hero{background:linear-gradient(120deg,#263d92,#7353d3);color:white;padding:30px;border-radius:20px;display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap;margin-bottom:22px}
 .hero h1{font-size:30px;margin:0 0 10px}
 .hero p{margin:0;color:#e0e5ff;max-width:620px;line-height:1.6}
-.hero-badge{
-  background:#ffffff20;border:1px solid #ffffff40;
-  padding:15px 20px;border-radius:14px;font-size:13px;
-}
-.tabs{
-  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;
-  background:#fff;padding:9px;border-radius:14px;
-  border:1px solid var(--line);
-}
-.tab{
-  border:0;background:transparent;padding:11px 16px;
-  border-radius:9px;color:var(--muted);font-weight:700;
-}
+.hero-badge{background:#ffffff20;border:1px solid #ffffff40;padding:15px 20px;border-radius:14px;font-size:13px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;background:#fff;padding:9px;border-radius:14px;border:1px solid var(--line)}
+.tab{border:0;background:transparent;padding:11px 16px;border-radius:9px;color:var(--muted);font-weight:700}
 .tab.active{background:#edf0ff;color:var(--blue)}
-.panel{display:none}
-.panel.active{display:block}
+.panel{display:none}.panel.active{display:block}
 .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:17px}
-.card{
-  background:var(--card);border:1px solid var(--line);
-  border-radius:16px;padding:20px;box-shadow:var(--shadow);
-  min-width:0;
-}
-.span-12{grid-column:span 12}
-.span-8{grid-column:span 8}
-.span-6{grid-column:span 6}
-.span-4{grid-column:span 4}
-.span-3{grid-column:span 3}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);min-width:0}
+.span-12{grid-column:span 12}.span-8{grid-column:span 8}.span-6{grid-column:span 6}.span-4{grid-column:span 4}.span-3{grid-column:span 3}
 .card h3{margin:0 0 15px;font-size:16px}
 .muted{color:var(--muted);font-size:13px;line-height:1.6}
 .metric{font-size:30px;font-weight:800;margin:8px 0}
 .metric-label{color:var(--muted);font-size:12px}
-.progress{
-  height:9px;background:#edf0f6;border-radius:20px;overflow:hidden;
-  margin-top:10px;
-}
-.progress span{
-  display:block;height:100%;width:0%;
-  background:linear-gradient(90deg,var(--blue),var(--purple));
-  border-radius:20px;transition:width .4s;
-}
+.progress{height:9px;background:#edf0f6;border-radius:20px;overflow:hidden;margin-top:10px}
+.progress span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:20px;transition:width .4s}
 label{font-size:12px;font-weight:700;color:#526078;display:block;margin-bottom:7px}
-input,select,textarea{
-  width:100%;border:1px solid #dfe4ef;border-radius:10px;
-  padding:12px;background:#fff;color:var(--ink);outline:none;
-}
+input,select,textarea{width:100%;border:1px solid #dfe4ef;border-radius:10px;padding:12px;background:#fff;color:var(--ink);outline:none}
 input:focus,select:focus,textarea:focus{border-color:var(--blue)}
-textarea{resize:vertical;min-height:85px}
-.field{margin-bottom:14px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.btn{
-  border:0;border-radius:10px;padding:12px 17px;
-  font-weight:700;background:var(--blue);color:white;
-}
-.btn:hover{filter:brightness(.96)}
-.btn.secondary{background:#edf0ff;color:var(--blue)}
-.btn.green{background:var(--green)}
-.btn.orange{background:#fff1df;color:#a96813}
+textarea{resize:vertical;min-height:85px}.field{margin-bottom:14px}
+.btn{border:0;border-radius:10px;padding:12px 17px;font-weight:700;background:var(--blue);color:white}
+.btn:hover{filter:brightness(.96)}.btn.secondary{background:#edf0ff;color:var(--blue)}.btn.green{background:var(--green)}
 .btn:disabled{opacity:.55;cursor:not-allowed}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
-.question-box{
-  background:#f7f8ff;border:1px solid #e5e8fb;
-  padding:18px;border-radius:13px;margin:15px 0;
-  line-height:1.7;font-size:16px;
-}
-.option{
-  display:block;width:100%;text-align:left;margin:8px 0;
-  padding:12px;border:1px solid var(--line);border-radius:10px;
-  background:white;color:var(--ink);
-}
-.option:hover{border-color:var(--blue);background:#f7f8ff}
-.option.selected{border:2px solid var(--blue);background:#eff1ff}
-.tag{
-  display:inline-block;padding:5px 9px;border-radius:20px;
-  font-size:10px;font-weight:800;background:#edf0ff;color:var(--blue);
-  margin:3px;
-}
-.tag.green{background:#e6f8f1;color:#13845f}
-.tag.orange{background:#fff2df;color:#a76b1c}
-.result{
-  white-space:pre-wrap;line-height:1.7;background:#f7f8fc;
-  border-radius:12px;padding:17px;margin-top:15px;font-size:14px;
-}
-.sensor{
-  padding:16px;background:#f8f9fd;border-radius:12px;
-}
-.sensor strong{font-size:23px;display:block;margin:9px 0}
+.question-box{background:#f7f8ff;border:1px solid #e5e8fb;padding:18px;border-radius:13px;margin:15px 0;line-height:1.8;font-size:16px;overflow-wrap:anywhere}
+.option{display:block;width:100%;text-align:left;margin:8px 0;padding:12px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink)}
+.option:hover{border-color:var(--blue);background:#f7f8ff}.option.selected{border:2px solid var(--blue);background:#eff1ff}
+.tag{display:inline-block;padding:5px 9px;border-radius:20px;font-size:10px;font-weight:800;background:#edf0ff;color:var(--blue);margin:3px}
+.tag.green{background:#e6f8f1;color:#13845f}.tag.orange{background:#fff2df;color:#a76b1c}
+.result{white-space:pre-wrap;line-height:1.8;background:#f7f8fc;border-radius:12px;padding:17px;margin-top:15px;font-size:14px;overflow-wrap:anywhere}
+.sensor{padding:16px;background:#f8f9fd;border-radius:12px}.sensor strong{font-size:23px;display:block;margin:9px 0}
 .sensor small{color:var(--muted)}
 .sensor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.badge{
-  padding:14px;border-radius:12px;background:#f7f8fc;
-  border:1px solid var(--line);font-size:13px;
-}
-.badge strong{display:block;margin-bottom:6px}
-.badge.locked{opacity:.45}
-.list-item{
-  padding:12px 0;border-bottom:1px solid var(--line);
-  display:flex;justify-content:space-between;gap:12px;
-  align-items:center;font-size:13px;
-}
+.badge{padding:14px;border-radius:12px;background:#f7f8fc;border:1px solid var(--line);font-size:13px}
+.badge strong{display:block;margin-bottom:6px}.badge.locked{opacity:.45}
+.list-item{padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:13px}
 .status{font-size:11px;font-weight:800;color:var(--green)}
 footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
-.notice{
-  background:#fff8e9;border:1px solid #f6e5bd;
-  color:#88601e;padding:12px;border-radius:10px;
-  font-size:12px;line-height:1.6;margin:12px 0;
-}
-#toast{
-  position:fixed;bottom:20px;right:20px;background:#172033;
-  color:white;padding:13px 18px;border-radius:10px;
-  display:none;z-index:10;font-size:13px;
-}
+.notice{background:#fff8e9;border:1px solid #f6e5bd;color:#88601e;padding:12px;border-radius:10px;font-size:12px;line-height:1.6;margin:12px 0}
+#toast{position:fixed;bottom:20px;right:20px;background:#172033;color:white;padding:13px 18px;border-radius:10px;display:none;z-index:10;font-size:13px}
+.math-toolbar{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 12px}
+.math-key{border:1px solid #dfe4ef;background:#f8f9ff;color:#263d92;border-radius:8px;padding:7px 11px;font-weight:700}
+.math-help{font-size:11px;color:var(--muted);margin-top:6px}
+.math-display{overflow-x:auto}
 @media(max-width:800px){
- .span-8,.span-6,.span-4,.span-3{grid-column:span 12}
- .sensor-grid{grid-template-columns:1fr}
- .hero h1{font-size:24px}
+  .span-8,.span-6,.span-4,.span-3{grid-column:span 12}
+  .sensor-grid{grid-template-columns:1fr}
+  .hero h1{font-size:24px}
 }
 </style>
 </head>
 
 <body>
-
 <header>
   <div class="brand">
     <div class="logo">L</div>
@@ -196,14 +109,10 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
 </header>
 
 <main>
-
 <section class="hero">
   <div>
     <h1>Learning that understands you.</h1>
-    <p>
-      An adaptive AI tutor that learns from your progress,
-      identifies knowledge gaps and chooses your next learning step.
-    </p>
+    <p>An adaptive AI tutor that learns from your progress, identifies knowledge gaps and chooses your next learning step.</p>
   </div>
   <div class="hero-badge">
     🧠 DIGITAL TWIN ENABLED<br><br>
@@ -220,26 +129,20 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
   <button class="tab" data-tab="revision">Revision Vault</button>
 </nav>
 
-<!-- OVERVIEW -->
-
 <section class="panel active" id="overview">
   <div class="grid">
-
     <div class="card span-3">
       <div class="metric" id="attemptCount">0</div>
       <div class="metric-label">Questions attempted</div>
     </div>
-
     <div class="card span-3">
       <div class="metric" id="masteryMetric">0%</div>
       <div class="metric-label">Estimated mastery</div>
     </div>
-
     <div class="card span-3">
       <div class="metric" id="xpMetric">0</div>
       <div class="metric-label">Learning XP</div>
     </div>
-
     <div class="card span-3">
       <div class="metric" id="savedCount">0</div>
       <div class="metric-label">Saved questions</div>
@@ -261,17 +164,13 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
 
     <div class="card span-6">
       <h3>🧭 Today's learning mission</h3>
-      <div class="question-box" id="mission">
-        Complete your first AI-generated practice question.
-      </div>
+      <div class="question-box" id="mission">Complete your first AI-generated practice question.</div>
       <span class="tag green">PERSONALIZED MISSION</span>
     </div>
 
     <div class="card span-6">
       <h3>🧠 Current learner status</h3>
-      <div id="learnerStatus" class="muted">
-        Your learning profile will become more informative as you practise.
-      </div>
+      <div id="learnerStatus" class="muted">Your learning profile will become more informative as you practise.</div>
     </div>
 
     <div class="card span-12">
@@ -279,15 +178,11 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
       <p class="muted">Choose a subject and topic to begin your adaptive learning session.</p>
       <button class="btn" onclick="switchTab('practice')">Start AI Practice →</button>
     </div>
-
   </div>
 </section>
 
-<!-- PRACTICE -->
-
 <section class="panel" id="practice">
   <div class="grid">
-
     <div class="card span-4">
       <h3>⚙️ Learning setup</h3>
 
@@ -302,23 +197,20 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
       <div class="field">
         <label>Class / Year</label>
         <select id="grade">
+          <option>Class 7</option>
+          <option>Class 8</option>
+          <option>Class 9</option>
           <option>Class 10</option>
           <option>Class 11</option>
           <option>Class 12</option>
-          <option>Year 1</option>
-          <option>Year 2</option>
-          <option>Year 3</option>
-          <option>Year 4</option>
-          <option>Year 5</option>
-          <option>Year 6</option>
         </select>
       </div>
 
       <div class="field">
         <label>Subject</label>
         <select id="subject">
-          <option>Physics</option>
           <option>Mathematics</option>
+          <option>Physics</option>
           <option>Chemistry</option>
           <option>Biology</option>
           <option>Science</option>
@@ -336,8 +228,8 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
       </div>
 
       <div class="field">
-        <label>Topic</label>
-        <input id="topic" placeholder="e.g. Laws of Motion">
+        <label>Topic / Chapter</label>
+        <input id="topic" placeholder="e.g. Linear Equations">
       </div>
 
       <div class="field">
@@ -366,24 +258,62 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
         </select>
       </div>
 
-      <button class="btn" id="generateBtn" onclick="generateQuestion()">
-        ✨ Generate AI Question
-      </button>
+      <div class="field">
+        <label>Explanation language</label>
+        <select id="language">
+          <option value="English">English</option>
+          <option value="Hindi">Hindi</option>
+          <option value="Bilingual (Hindi + English)">Bilingual (Hindi + English)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Textbook style</label>
+        <select id="textbookStyle">
+          <option>Indian school textbook / NCERT-CBSE style</option>
+          <option>General international style</option>
+        </select>
+      </div>
+
+      <button class="btn" id="generateBtn" onclick="generateQuestion()">✨ Generate AI Question</button>
       <p class="muted" id="aiStatus">AI adapts questions using your learning history.</p>
     </div>
 
     <div class="card span-8">
       <h3>📖 Adaptive practice workspace</h3>
+
       <div id="questionArea">
         <div class="question-box">
           Your next question will appear here.<br><br>
-          Select your subject and topic, then click Generate AI Question.
+          Select your class, subject and topic, then click Generate AI Question.
         </div>
       </div>
 
       <div id="answerArea" style="display:none">
         <label>Your answer</label>
+
+        <div class="math-toolbar" aria-label="Math symbol shortcuts">
+          <button class="math-key" type="button" onclick="insertMath('×')">×</button>
+          <button class="math-key" type="button" onclick="insertMath('÷')">÷</button>
+          <button class="math-key" type="button" onclick="insertMath('√')">√</button>
+          <button class="math-key" type="button" onclick="insertMath('π')">π</button>
+          <button class="math-key" type="button" onclick="insertMath('²')">x²</button>
+          <button class="math-key" type="button" onclick="insertMath('³')">x³</button>
+          <button class="math-key" type="button" onclick="insertMath('½')">½</button>
+          <button class="math-key" type="button" onclick="insertMath('¾')">¾</button>
+          <button class="math-key" type="button" onclick="insertMath('∠')">∠</button>
+          <button class="math-key" type="button" onclick="insertMath('△')">△</button>
+          <button class="math-key" type="button" onclick="insertMath('≠')">≠</button>
+          <button class="math-key" type="button" onclick="insertMath('≤')">≤</button>
+          <button class="math-key" type="button" onclick="insertMath('≥')">≥</button>
+          <button class="math-key" type="button" onclick="insertMath('∥')">∥</button>
+        </div>
+
         <textarea id="studentAnswer" placeholder="Write your answer here..."></textarea>
+
+        <div class="math-help">
+          Indian textbook symbols supported: ×, ÷, √, π, ∠, △, ∥, fractions, powers and LaTeX equations.
+        </div>
 
         <div class="field" style="margin-top:12px">
           <label>How confident are you?</label>
@@ -394,9 +324,7 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
           </select>
         </div>
 
-        <button class="btn green" id="submitBtn" onclick="submitAnswer()">
-          Submit for AI Evaluation
-        </button>
+        <button class="btn green" id="submitBtn" onclick="submitAnswer()">Submit for AI Evaluation</button>
       </div>
 
       <div id="feedbackArea"></div>
@@ -408,19 +336,14 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
       </div>
 
       <div class="notice">
-        AI-generated educational feedback may occasionally be inaccurate.
-        Verify important exam concepts with your textbook or teacher.
+        AI-generated educational feedback may occasionally be inaccurate. Verify important exam concepts with your textbook or teacher.
       </div>
     </div>
-
   </div>
 </section>
 
-<!-- DIGITAL TWIN -->
-
 <section class="panel" id="twin">
   <div class="grid">
-
     <div class="card span-12">
       <h3>🧠 Your Digital Learning Twin</h3>
       <p class="muted">
@@ -466,20 +389,15 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
       <div class="list-item"><span>Mastery estimation</span><span class="status">BROWSER PROCESSING</span></div>
       <div class="list-item"><span>Next learning recommendation</span><span class="status">ADAPTIVE</span></div>
     </div>
-
   </div>
 </section>
 
-<!-- IOT -->
-
 <section class="panel" id="environment">
   <div class="grid">
-
     <div class="card span-12">
       <h3>🌐 Smart Learning Environment</h3>
       <p class="muted">
-        A simulated IoT environment demonstrating how environmental signals
-        could support a future connected learning space.
+        A simulated IoT environment demonstrating how environmental signals could support a future connected learning space.
       </p>
       <span class="tag orange">SIMULATED SENSOR DATA</span>
       <span class="tag">NO PHYSICAL SENSORS CONNECTED</span>
@@ -508,32 +426,23 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
     <div class="card span-6">
       <h3>Environment status</h3>
       <div class="metric" id="environmentStatus">Initializing</div>
-      <p class="muted" id="environmentMessage">
-        Simulated environment readings will update automatically.
-      </p>
+      <p class="muted" id="environmentMessage">Simulated environment readings will update automatically.</p>
     </div>
 
     <div class="card span-6">
       <h3>💡 Smart environment suggestion</h3>
-      <div class="question-box" id="environmentTip">
-        Waiting for simulated sensor readings.
-      </div>
+      <div class="question-box" id="environmentTip">Waiting for simulated sensor readings.</div>
       <p class="muted">These suggestions are based only on simulated environmental values.</p>
     </div>
-
   </div>
 </section>
 
-<!-- INSIGHTS -->
-
 <section class="panel" id="insights">
   <div class="grid">
-
     <div class="card span-12">
       <h3>🔍 Explainable AI & Predictive Analytics</h3>
       <p class="muted">
-        LearnLoop explains its learning recommendations and estimates possible
-        knowledge gaps from your recorded practice evidence.
+        LearnLoop explains its learning recommendations and estimates possible knowledge gaps from your recorded practice evidence.
       </p>
     </div>
 
@@ -546,35 +455,27 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
 
     <div class="card span-6">
       <h3>📊 Predictive learning insights</h3>
-      <div id="prediction" class="muted">
-        More practice data is needed to make useful estimates.
-      </div>
+      <div id="prediction" class="muted">More practice data is needed to make useful estimates.</div>
     </div>
 
     <div class="card span-12">
       <h3>⚡ Edge intelligence</h3>
       <p class="muted">
-        LearnLoop calculates progress, XP, mastery estimates and learning
-        history locally in your browser. Your local learner profile is stored
-        on this device. Gemini is used when you request AI generation or evaluation.
+        LearnLoop calculates progress, XP, mastery estimates and learning history locally in your browser.
+        Your local learner profile is stored on this device. Gemini is used when you request AI generation or evaluation.
       </p>
       <span class="tag green">LOCAL PROCESSING ACTIVE</span>
       <span class="tag">NO SEPARATE EDGE HARDWARE</span>
     </div>
-
   </div>
 </section>
 
-<!-- REVISION -->
-
 <section class="panel" id="revision">
   <div class="grid">
-
     <div class="card span-12">
       <h3>📚 Revision Vault</h3>
       <p class="muted">
-        Questions saved on this device remain available for revision without
-        requesting a new AI response.
+        Questions saved on this device remain available for revision without requesting a new AI response.
       </p>
       <div class="actions">
         <button class="btn secondary" onclick="loadSavedPractice()">Load saved questions</button>
@@ -596,17 +497,14 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
         <div class="badge locked" id="badgeSave">📚 <strong>Revision Ready</strong>Save your first question</div>
       </div>
     </div>
-
   </div>
 </section>
-
 </main>
 
 <footer>
-  LearnLoop AI · Adaptive Exam-Prep Tutor · Student Hackathon Prototype
-  <br><br>
-  Learning insights are estimates, not guaranteed predictions.
-  <br>© LearnLoop AI
+  LearnLoop AI · Adaptive Exam-Prep Tutor · Student Hackathon Prototype<br><br>
+  Learning insights are estimates, not guaranteed predictions.<br>
+  © LearnLoop AI
 </footer>
 
 <div id="toast"></div>
@@ -617,7 +515,6 @@ const STORAGE_KEY = "learnloop-universal-v1";
 
 let state = loadState();
 let currentQuestion = null;
-let selectedOption = "";
 let currentHint = "";
 let environmentData = {};
 
@@ -645,11 +542,14 @@ function persist(){
 }
 
 function toast(message){
-  const el=document.getElementById("toast");
-  el.textContent=message;
-  el.style.display="block";
+  const el = document.getElementById("toast");
+  el.textContent = message;
+  el.style.display = "block";
+
   clearTimeout(window.toastTimer);
-  window.toastTimer=setTimeout(()=>el.style.display="none",2600);
+  window.toastTimer = setTimeout(()=>{
+    el.style.display = "none";
+  },2600);
 }
 
 function switchTab(id){
@@ -667,16 +567,21 @@ document.querySelectorAll(".tab").forEach(btn=>{
 });
 
 function getTopicStats(){
-  const stats={};
+  const stats = {};
 
   state.attempts.forEach(a=>{
-    const key=a.topic || "General";
+    const key = a.topic || "General";
 
     if(!stats[key]){
-      stats[key]={total:0,correct:0,partial:0};
+      stats[key] = {
+        total:0,
+        correct:0,
+        partial:0
+      };
     }
 
     stats[key].total++;
+
     if(a.result==="correct") stats[key].correct++;
     if(a.result==="partial") stats[key].partial++;
   });
@@ -687,88 +592,109 @@ function getTopicStats(){
 function getMastery(){
   if(!state.attempts.length) return 0;
 
-  const total=state.attempts.length;
-  const score=state.attempts.reduce((sum,a)=>{
-    return sum+(a.result==="correct"?1:a.result==="partial"?.5:0);
+  const score = state.attempts.reduce((sum,a)=>{
+    return sum + (
+      a.result==="correct" ? 1 :
+      a.result==="partial" ? 0.5 : 0
+    );
   },0);
 
-  return Math.round(score/total*100);
+  return Math.round(score/state.attempts.length*100);
 }
 
 function getDigitalTwin(){
-  const stats=getTopicStats();
+  const stats = getTopicStats();
 
   return {
     totalAttempts:state.attempts.length,
     estimatedMastery:getMastery(),
     xp:state.xp,
     topicPerformance:stats,
+
     strengths:Object.entries(stats)
-      .filter(([k,v])=>v.correct/v.total>=.7)
+      .filter(([k,v])=>v.correct/v.total>=0.7)
       .map(([k])=>k),
+
     improvementAreas:Object.entries(stats)
-      .filter(([k,v])=>(v.correct+v.partial*.5)/v.total<.5)
+      .filter(([k,v])=>(v.correct+v.partial*0.5)/v.total<0.5)
       .map(([k])=>k)
   };
 }
 
 function refresh(){
-  const mastery=getMastery();
-  const attempts=state.attempts.length;
-  const level=Math.floor(state.xp/100)+1;
+  const mastery = getMastery();
+  const attempts = state.attempts.length;
+  const level = Math.floor(state.xp/100)+1;
 
-  document.getElementById("attemptCount").textContent=attempts;
-  document.getElementById("masteryMetric").textContent=mastery+"%";
-  document.getElementById("xpMetric").textContent=state.xp;
-  document.getElementById("xpHeader").textContent=state.xp;
-  document.getElementById("savedCount").textContent=state.saved.length;
+  document.getElementById("attemptCount").textContent = attempts;
+  document.getElementById("masteryMetric").textContent = mastery+"%";
+  document.getElementById("xpMetric").textContent = state.xp;
+  document.getElementById("xpHeader").textContent = state.xp;
+  document.getElementById("savedCount").textContent = state.saved.length;
 
-  document.getElementById("mainProgress").style.width=mastery+"%";
-  document.getElementById("progressText").textContent=
-    attempts ? `${attempts} practice attempts recorded. Estimated mastery: ${mastery}%.`
+  document.getElementById("mainProgress").style.width = mastery+"%";
+
+  document.getElementById("progressText").textContent = attempts
+    ? `${attempts} practice attempts recorded. Estimated mastery: ${mastery}%.`
     : "Start practising to build your learner profile.";
 
-  document.getElementById("levelMetric").textContent="Level "+level;
-  document.getElementById("levelText").textContent=
-    level>=5?"Advanced Explorer":level>=3?"Active Learner":"Learning Explorer";
+  document.getElementById("levelMetric").textContent = "Level "+level;
 
-  document.getElementById("xpProgress").style.width=(state.xp%100)+"%";
+  document.getElementById("levelText").textContent =
+    level>=5 ? "Advanced Explorer" :
+    level>=3 ? "Active Learner" :
+    "Learning Explorer";
 
-  document.getElementById("twinMastery").textContent=mastery+"%";
-  document.getElementById("twinProgress").style.width=mastery+"%";
-  document.getElementById("twinAttempts").textContent=attempts;
-  document.getElementById("twinLevel").textContent=
-    mastery>=75?"Strong":mastery>=45?"Developing":"Beginner";
+  document.getElementById("xpProgress").style.width = (state.xp%100)+"%";
 
-  const stats=getTopicStats();
-  const entries=Object.entries(stats);
+  document.getElementById("twinMastery").textContent = mastery+"%";
+  document.getElementById("twinProgress").style.width = mastery+"%";
+  document.getElementById("twinAttempts").textContent = attempts;
 
-  const strengths=entries.filter(([k,v])=>v.correct/v.total>=.7);
-  const weaknesses=entries.filter(([k,v])=>(v.correct+v.partial*.5)/v.total<.5);
+  document.getElementById("twinLevel").textContent =
+    mastery>=75 ? "Strong" :
+    mastery>=45 ? "Developing" :
+    "Beginner";
 
-  document.getElementById("strengths").textContent=
-    strengths.length?strengths.map(x=>x[0]).join(", "):"Not enough evidence of strong topics yet.";
+  const entries = Object.entries(getTopicStats());
 
-  document.getElementById("weaknesses").textContent=
-    weaknesses.length?weaknesses.map(x=>x[0]).join(", "):"No clear weak topic identified yet.";
+  const strengths = entries.filter(([k,v])=>v.correct/v.total>=0.7);
+  const weaknesses = entries.filter(([k,v])=>(v.correct+v.partial*0.5)/v.total<0.5);
 
-  document.getElementById("learnerStatus").textContent=
-    attempts
+  document.getElementById("strengths").textContent =
+    strengths.length
+      ? strengths.map(x=>x[0]).join(", ")
+      : "Not enough evidence of strong topics yet.";
+
+  document.getElementById("weaknesses").textContent =
+    weaknesses.length
+      ? weaknesses.map(x=>x[0]).join(", ")
+      : "No clear weak topic identified yet.";
+
+  document.getElementById("learnerStatus").textContent = attempts
     ? `You have completed ${attempts} attempts. Your current estimated mastery is ${mastery}%. Your learner model updates after each evaluated answer.`
     : "Your learner model is waiting for its first practice attempt.";
 
-  document.getElementById("prediction").textContent=
-    entries.length
+  document.getElementById("prediction").textContent = entries.length
     ? entries.map(([k,v])=>{
-        const rate=Math.round((v.correct+v.partial*.5)/v.total*100);
-        return `${k}: ${rate}% estimated performance across ${v.total} attempt(s). ${rate<50?"Consider revising this topic.":rate<75?"More practice may help.":"Current evidence suggests a relative strength."}`;
+        const rate = Math.round((v.correct+v.partial*0.5)/v.total*100);
+
+        return `${k}: ${rate}% estimated performance across ${v.total} attempt(s). ${
+          rate<50
+            ? "Consider revising this topic."
+            : rate<75
+            ? "More practice may help."
+            : "Current evidence suggests a relative strength."
+        }`;
       }).join("\n\n")
     : "Not enough practice evidence yet. Complete questions in different topics to build useful estimates.";
 
-  document.getElementById("mission").textContent=
-    attempts<1?"Complete your first AI-generated practice question."
-    :attempts<5?`Complete ${5-attempts} more practice attempt(s) to reach your first practice milestone.`
-    : "Keep practising a different topic to strengthen your learner model.";
+  document.getElementById("mission").textContent =
+    attempts<1
+      ? "Complete your first AI-generated practice question."
+      : attempts<5
+      ? `Complete ${5-attempts} more practice attempt(s) to reach your first practice milestone.`
+      : "Keep practising a different topic to strengthen your learner model.";
 
   document.getElementById("badgeFirst").classList.toggle("locked",attempts<1);
   document.getElementById("badgeFive").classList.toggle("locked",attempts<5);
@@ -779,41 +705,43 @@ function refresh(){
 }
 
 function learnerProfile(){
-  const stats=getTopicStats();
-  const topic=document.getElementById("topic").value.trim();
+  const stats = getTopicStats();
+  const twin = getDigitalTwin();
 
   return {
     mastery:getMastery(),
     attempts:state.attempts.length,
     xp:state.xp,
     topicPerformance:stats,
-    currentTopic:topic,
-    strengths:getDigitalTwin().strengths,
-    weaknesses:getDigitalTwin().improvementAreas
+    currentTopic:document.getElementById("topic").value.trim(),
+    strengths:twin.strengths,
+    weaknesses:twin.improvementAreas
   };
 }
 
 function getAdaptiveLevel(){
-  const preference=document.getElementById("difficulty").value;
+  const preference = document.getElementById("difficulty").value;
+
   if(preference!=="Adaptive") return preference;
 
-  const mastery=getMastery();
+  const mastery = getMastery();
 
   if(state.attempts.length<2) return "Foundation";
   if(mastery<40) return "Foundation";
   if(mastery<65) return "Intermediate";
   if(mastery<85) return "Advanced";
+
   return "Challenge";
 }
 
 async function callAI(payload){
-  const response=await fetch(API,{
+  const response = await fetch(API,{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify(payload)
   });
 
-  const data=await response.json();
+  const data = await response.json();
 
   if(!response.ok || !data.success){
     throw new Error(data.error || "AI request failed.");
@@ -823,87 +751,119 @@ async function callAI(payload){
 }
 
 async function generateQuestion(){
-  const topic=document.getElementById("topic").value.trim();
+  const topic = document.getElementById("topic").value.trim();
 
   if(!topic){
     toast("Please enter a topic first.");
     return;
   }
 
-  const btn=document.getElementById("generateBtn");
-  btn.disabled=true;
-  btn.textContent="Generating...";
+  const btn = document.getElementById("generateBtn");
+  btn.disabled = true;
+  btn.textContent = "Generating...";
 
-  document.getElementById("aiStatus").textContent=
+  document.getElementById("aiStatus").textContent =
     "LearnLoop is analysing your learner profile...";
 
   try{
-    const level=getAdaptiveLevel();
+    const level = getAdaptiveLevel();
 
-    const data=await callAI({
+    const data = await callAI({
       action:"generateQuestion",
+
       educationLevel:document.getElementById("education").value,
       grade:document.getElementById("grade").value,
       subject:document.getElementById("subject").value,
+
       topic,
       format:document.getElementById("format").value,
+
       level,
       difficulty:level,
+
+      language:document.getElementById("language").value,
+      textbookStyle:document.getElementById("textbookStyle").value,
+
+      mathNotation:
+        "Indian school textbook notation: ×, ÷, √, π, ∠, △, ∥, superscripts, subscripts, fractions and LaTeX",
+
       learnerProfile:learnerProfile(),
       digitalTwin:getDigitalTwin(),
       environment:environmentData,
+
       recentQuestions:state.attempts.slice(-5).map(a=>a.question)
     });
 
-    currentQuestion=data.question;
-    currentHint=currentQuestion.hint || "";
-    selectedOption="";
+    currentQuestion = data.question;
+    currentHint = currentQuestion.hint || "";
 
     renderQuestion();
 
-    document.getElementById("aiStatus").textContent=
+    document.getElementById("aiStatus").textContent =
       "AI question generated successfully.";
 
-    document.getElementById("decisionReason").textContent=
+    document.getElementById("decisionReason").textContent =
       currentQuestion.decisionReason ||
       `The question was generated for ${topic} at ${level} difficulty using your available learner profile.`;
 
     toast("Your adaptive question is ready!");
 
   }catch(error){
-    document.getElementById("aiStatus").textContent=error.message;
+    document.getElementById("aiStatus").textContent = error.message;
     toast(error.message);
+
   }finally{
-    btn.disabled=false;
-    btn.textContent="✨ Generate AI Question";
+    btn.disabled = false;
+    btn.textContent = "✨ Generate AI Question";
+  }
+}
+
+function renderMathIn(element){
+  if(window.MathJax && MathJax.typesetPromise){
+    MathJax.typesetClear([element]);
+
+    MathJax.typesetPromise([element]).catch(err=>{
+      console.warn("Math rendering issue:",err);
+    });
   }
 }
 
 function renderQuestion(){
   if(!currentQuestion) return;
 
-  const area=document.getElementById("questionArea");
+  const area = document.getElementById("questionArea");
 
-  area.innerHTML=`
-    <span class="tag">${escapeHTML(currentQuestion.format||"Practice")}</span>
-    <span class="tag green">${escapeHTML(currentQuestion.level||"Adaptive")}</span>
-    <div class="question-box">${escapeHTML(currentQuestion.question||"")}</div>
+  area.innerHTML = `
+    <span class="tag">${escapeHTML(currentQuestion.format || "Practice")}</span>
+    <span class="tag green">${escapeHTML(currentQuestion.level || "Adaptive")}</span>
+
+    <div class="question-box math-display">
+      ${escapeHTML(currentQuestion.question || "")}
+    </div>
+
     <div id="optionsArea"></div>
-    <p class="muted">Topic: ${escapeHTML(currentQuestion.topic||"")}</p>
+
+    <p class="muted">
+      Topic: ${escapeHTML(currentQuestion.topic || "")}
+    </p>
   `;
 
-  const optionsArea=document.getElementById("optionsArea");
+  const optionsArea = document.getElementById("optionsArea");
 
-  if(Array.isArray(currentQuestion.options)&&currentQuestion.options.length){
+  if(Array.isArray(currentQuestion.options) && currentQuestion.options.length){
     currentQuestion.options.forEach((option,index)=>{
-      const button=document.createElement("button");
-      button.className="option";
-      button.textContent=String.fromCharCode(65+index)+". "+option;
+      const button = document.createElement("button");
 
-      button.onclick=()=>{
-        selectedOption=option;
-        document.getElementById("studentAnswer").value=option;
-        document.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));
+      button.className = "option";
+      button.textContent = String.fromCharCode(65+index)+". "+option;
+
+      button.onclick = ()=>{
+        document.getElementById("studentAnswer").value = option;
+
+        document.querySelectorAll(".option").forEach(x=>{
+          x.classList.remove("selected");
+        });
+
         button.classList.add("selected");
       };
 
@@ -911,11 +871,28 @@ function renderQuestion(){
     });
   }
 
-  document.getElementById("studentAnswer").value="";
-  document.getElementById("answerArea").style.display="block";
-  document.getElementById("feedbackArea").innerHTML="";
-  document.getElementById("hintBtn").disabled=false;
-  document.getElementById("saveBtn").disabled=false;
+  document.getElementById("studentAnswer").value = "";
+  document.getElementById("answerArea").style.display = "block";
+  document.getElementById("feedbackArea").innerHTML = "";
+
+  document.getElementById("hintBtn").disabled = false;
+  document.getElementById("saveBtn").disabled = false;
+
+  renderMathIn(area);
+}
+
+function insertMath(symbol){
+  const field = document.getElementById("studentAnswer");
+  const start = field.selectionStart;
+  const end = field.selectionEnd;
+
+  field.value =
+    field.value.slice(0,start) +
+    symbol +
+    field.value.slice(end);
+
+  field.focus();
+  field.selectionStart = field.selectionEnd = start+symbol.length;
 }
 
 function showHint(){
@@ -924,61 +901,81 @@ function showHint(){
     return;
   }
 
-  document.getElementById("feedbackArea").innerHTML=
-    `<div class="result"><strong>💡 Hint</strong><br>${escapeHTML(currentHint)}</div>`;
+  const area = document.getElementById("feedbackArea");
+
+  area.innerHTML = `
+    <div class="result">
+      <strong>💡 Hint</strong><br>
+      ${escapeHTML(currentHint)}
+    </div>
+  `;
+
+  renderMathIn(area);
 }
 
 async function submitAnswer(){
   if(!currentQuestion) return;
 
-  const studentAnswer=document.getElementById("studentAnswer").value.trim();
+  const studentAnswer = document.getElementById("studentAnswer").value.trim();
 
   if(!studentAnswer){
     toast("Please enter your answer.");
     return;
   }
 
-  const btn=document.getElementById("submitBtn");
-  btn.disabled=true;
-  btn.textContent="Evaluating...";
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true;
+  btn.textContent = "Evaluating...";
 
   try{
-    const topic=document.getElementById("topic").value.trim();
-    const feedback=await callAI({
+    const topic = document.getElementById("topic").value.trim();
+
+    const feedback = await callAI({
       action:"analyze",
+
       educationLevel:document.getElementById("education").value,
       grade:document.getElementById("grade").value,
       subject:document.getElementById("subject").value,
+
       topic,
       question:currentQuestion.question,
+
       studentAnswer,
-      expectedAnswer:currentQuestion.answer || currentQuestion.correctAnswer,
-      correctAnswer:currentQuestion.answer || currentQuestion.correctAnswer,
+
+      expectedAnswer:
+        currentQuestion.answer || currentQuestion.correctAnswer,
+
+      correctAnswer:
+        currentQuestion.answer || currentQuestion.correctAnswer,
+
       explanation:currentQuestion.explanation,
       reasoning:"",
+
       confidence:document.getElementById("confidence").value,
+
+      language:document.getElementById("language").value,
+      textbookStyle:document.getElementById("textbookStyle").value,
+
       learnerProfile:learnerProfile(),
       digitalTwin:getDigitalTwin(),
       environment:environmentData
     });
 
-    const text=feedback.feedback || "Your answer has been evaluated.";
-    const lower=text.toLowerCase();
+    const text = feedback.feedback || "Your answer has been evaluated.";
+    const lower = text.toLowerCase();
 
-    let result="reviewed";
+    let result = "reviewed";
 
     if(lower.includes("partially correct")){
-      result="partial";
+      result = "partial";
     }else if(
-      lower.includes("incorrect")||
-      lower.includes("not correct")||
+      lower.includes("incorrect") ||
+      lower.includes("not correct") ||
       lower.includes("wrong answer")
     ){
-      result="incorrect";
-    }else if(
-      lower.includes("correct")
-    ){
-      result="correct";
+      result = "incorrect";
+    }else if(lower.includes("correct")){
+      result = "correct";
     }
 
     state.attempts.push({
@@ -991,33 +988,44 @@ async function submitAnswer(){
       date:new Date().toISOString()
     });
 
-    state.xp+=result==="correct"?20:result==="partial"?12:result==="incorrect"?5:10;
+    const earned =
+      result==="correct" ? 20 :
+      result==="partial" ? 12 :
+      result==="incorrect" ? 5 : 10;
+
+    state.xp += earned;
 
     persist();
     refresh();
 
-    document.getElementById("feedbackArea").innerHTML=
-      `<div class="result"><strong>🤖 AI Evaluation</strong><br><br>${escapeHTML(text)}<br><br><span class="tag green">+${result==="correct"?20:result==="partial"?12:result==="incorrect"?5:10} XP</span></div>`;
+    const area = document.getElementById("feedbackArea");
 
-    document.getElementById("submitBtn").textContent="Evaluated";
+    area.innerHTML = `
+      <div class="result">
+        <strong>🤖 AI Evaluation</strong><br><br>
+        ${escapeHTML(text)}<br><br>
+        <span class="tag green">+${earned} XP</span>
+      </div>
+    `;
+
+    renderMathIn(area);
+
+    btn.textContent = "Evaluated";
     toast("Answer evaluated. Learner profile updated.");
 
   }catch(error){
     toast(error.message);
-    btn.textContent="Submit for AI Evaluation";
+    btn.textContent = "Submit for AI Evaluation";
+
   }finally{
-    btn.disabled=false;
+    btn.disabled = false;
   }
 }
 
 function saveQuestion(){
   if(!currentQuestion) return;
 
-  const exists=state.saved.some(
-    q=>q.question===currentQuestion.question
-  );
-
-  if(exists){
+  if(state.saved.some(q=>q.question===currentQuestion.question)){
     toast("This question is already saved.");
     return;
   }
@@ -1029,30 +1037,32 @@ function saveQuestion(){
 
   persist();
   refresh();
+
   toast("Question saved to Revision Vault.");
 }
 
 function renderSaved(){
-  const list=document.getElementById("savedList");
+  const list = document.getElementById("savedList");
 
   if(!state.saved.length){
-    list.textContent="No saved questions yet.";
+    list.textContent = "No saved questions yet.";
     return;
   }
 
-  list.innerHTML="";
+  list.innerHTML = "";
 
   state.saved.forEach((q,index)=>{
-    const div=document.createElement("div");
-    div.className="list-item";
+    const div = document.createElement("div");
+    div.className = "list-item";
 
-    const name=document.createElement("span");
-    name.textContent=(index+1)+". "+q.question;
+    const name = document.createElement("span");
+    name.textContent = (index+1)+". "+q.question;
 
-    const button=document.createElement("button");
-    button.className="btn secondary";
-    button.textContent="Open";
-    button.onclick=()=>openSaved(index);
+    const button = document.createElement("button");
+    button.className = "btn secondary";
+    button.textContent = "Open";
+
+    button.onclick = ()=>openSaved(index);
 
     div.append(name,button);
     list.appendChild(div);
@@ -1060,11 +1070,12 @@ function renderSaved(){
 }
 
 function openSaved(index){
-  const q=state.saved[index];
+  const q = state.saved[index];
+
   if(!q) return;
 
-  currentQuestion=q;
-  currentHint=q.hint||"";
+  currentQuestion = q;
+  currentHint = q.hint || "";
 
   switchTab("practice");
   renderQuestion();
@@ -1082,16 +1093,18 @@ function loadSavedPractice(){
 }
 
 function exportData(){
-  const blob=new Blob(
+  const blob = new Blob(
     [JSON.stringify(state,null,2)],
     {type:"application/json"}
   );
 
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url;
-  a.download="LearnLoop-Learner-Profile.json";
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = "LearnLoop-Learner-Profile.json";
   a.click();
+
   URL.revokeObjectURL(url);
   toast("Learner data exported.");
 }
@@ -1103,75 +1116,78 @@ function escapeHTML(value){
     ">":"&gt;",
     '"':"&quot;",
     "'":"&#39;"
-  })[char]);
+  }[char]));
 }
 
-/* SIMULATED IOT ENVIRONMENT */
-
 function updateEnvironment(){
-  const noise=Math.round(25+Math.random()*55);
-  const brightness=Math.round(150+Math.random()*650);
-  const temperature=Math.round(20+Math.random()*15);
+  const noise = Math.round(25+Math.random()*55);
+  const brightness = Math.round(150+Math.random()*650);
+  const temperature = Math.round(20+Math.random()*15);
 
-  environmentData={
+  environmentData = {
     status:"SIMULATED",
     noise,
     brightness,
     temperature
   };
 
-  document.getElementById("noise").textContent=noise+" dB";
-  document.getElementById("brightness").textContent=brightness+" lux";
-  document.getElementById("temperature").textContent=temperature+" °C";
+  document.getElementById("noise").textContent = noise+" dB";
+  document.getElementById("brightness").textContent = brightness+" lux";
+  document.getElementById("temperature").textContent = temperature+" °C";
 
-  let status="Comfortable";
-  let message="The simulated environment is within a reasonable range.";
-  let tip="Continue studying at a comfortable pace.";
+  let status = "Comfortable";
+  let message = "The simulated environment is within a reasonable range.";
+  let tip = "Continue studying at a comfortable pace.";
 
   if(noise>65){
-    status="Noisy";
-    message="The simulated sound level is relatively high.";
-    tip="Consider moving to a quieter study space if possible.";
+    status = "Noisy";
+    message = "The simulated sound level is relatively high.";
+    tip = "Consider moving to a quieter study space if possible.";
+
   }else if(brightness<250){
-    status="Low brightness";
-    message="The simulated brightness reading is relatively low.";
-    tip="Consider improving the lighting in your study area.";
+    status = "Low brightness";
+    message = "The simulated brightness reading is relatively low.";
+    tip = "Consider improving the lighting in your study area.";
+
   }else if(temperature>32){
-    status="Warm";
-    message="The simulated temperature reading is high.";
-    tip="Consider a more comfortable study environment.";
+    status = "Warm";
+    message = "The simulated temperature reading is high.";
+    tip = "Consider a more comfortable study environment.";
   }
 
-  document.getElementById("environmentStatus").textContent=status;
-  document.getElementById("environmentMessage").textContent=message;
-  document.getElementById("environmentTip").textContent=tip;
+  document.getElementById("environmentStatus").textContent = status;
+  document.getElementById("environmentMessage").textContent = message;
+  document.getElementById("environmentTip").textContent = tip;
 }
 
 function updateConnection(){
-  const connected=navigator.onLine;
-  document.getElementById("connection").textContent=
-    connected?"● Online":"● Offline";
-  document.getElementById("connection").style.color=
-    connected?"#16885f":"#bd7130";
+  const connected = navigator.onLine;
+
+  document.getElementById("connection").textContent =
+    connected ? "● Online" : "● Offline";
+
+  document.getElementById("connection").style.color =
+    connected ? "#16885f" : "#bd7130";
 }
 
 window.addEventListener("online",updateConnection);
 window.addEventListener("offline",updateConnection);
 
 document.getElementById("education").addEventListener("change",()=>{
-  const isCollege=document.getElementById("education").value==="College";
-  const grade=document.getElementById("grade");
+  const isCollege =
+    document.getElementById("education").value==="College";
 
-  grade.innerHTML=isCollege
-    ?Array.from({length:6},(_,i)=>`<option>Year ${i+1}</option>`).join("")
-    :Array.from({length:7},(_,i)=>`<option>Class ${i+6}</option>`).join("");
+  const grade = document.getElementById("grade");
+
+  grade.innerHTML = isCollege
+    ? Array.from({length:6},(_,i)=>`<option>Year ${i+1}</option>`).join("")
+    : Array.from({length:6},(_,i)=>`<option>Class ${i+7}</option>`).join("");
 });
 
 updateConnection();
 updateEnvironment();
 setInterval(updateEnvironment,5000);
 refresh();
-
 </script>
 </body>
 </html>
