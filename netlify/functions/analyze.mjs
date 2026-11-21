@@ -1,16 +1,19 @@
 export default async (req) => {
   if (req.method !== "POST") {
-    return new Response(
-      JSON.stringify({ success: false, error: "Only POST requests are allowed." }),
-      { status: 405, headers: { "Content-Type": "application/json" } }
-    );
+    return json({
+      success: false,
+      error: "Only POST requests are allowed."
+    }, 405);
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
   const model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
 
   if (!apiKey) {
-    return json({ success: false, error: "GEMINI_API_KEY is missing in Netlify environment variables." }, 500);
+    return json({
+      success: false,
+      error: "GEMINI_API_KEY is missing in Netlify environment variables."
+    }, 500);
   }
 
   try {
@@ -24,10 +27,14 @@ export default async (req) => {
       return await analyzeAnswer(body, apiKey, model);
     }
 
-    return json({ success: false, error: "Unknown action." }, 400);
+    return json({
+      success: false,
+      error: "Unknown action."
+    }, 400);
 
   } catch (error) {
     console.error("LearnLoop error:", error);
+
     return json({
       success: false,
       error: error.message || "Something went wrong."
@@ -35,12 +42,16 @@ export default async (req) => {
   }
 };
 
+
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { "Content-Type": "application/json" }
+    headers: {
+      "Content-Type": "application/json"
+    }
   });
 }
+
 
 async function askGemini(prompt, apiKey, model) {
   const url =
@@ -48,17 +59,24 @@ async function askGemini(prompt, apiKey, model) {
 
   let lastError;
 
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 25000);
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const controller = new AbortController();
 
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, 11000);
+
+    try {
       const response = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
           contents: [{
-            parts: [{ text: prompt }]
+            parts: [{
+              text: prompt
+            }]
           }],
           generationConfig: {
             temperature: 0.7,
@@ -68,23 +86,33 @@ async function askGemini(prompt, apiKey, model) {
         signal: controller.signal
       });
 
-      clearTimeout(timeout);
+      const responseText = await response.text();
 
-      const data = await response.json();
+      let data;
+
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        throw new Error(
+          "Gemini returned an invalid response. Please try again."
+        );
+      }
 
       if (!response.ok) {
         const message =
-          data.error?.message || `Gemini API error: ${response.status}`;
+          data.error?.message ||
+          `Gemini API error: ${response.status}`;
 
-        if ([408, 429, 500, 502, 503, 504].includes(response.status)) {
-          throw new Error(message);
-        }
+        const error = new Error(message);
+        error.status = response.status;
 
-        throw new Error(message);
+        throw error;
       }
 
       const output =
-        data.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("");
+        data.candidates?.[0]?.content?.parts
+          ?.map(part => part.text || "")
+          .join("");
 
       if (!output) {
         throw new Error("Gemini returned an empty response.");
@@ -95,16 +123,29 @@ async function askGemini(prompt, apiKey, model) {
     } catch (error) {
       lastError = error;
 
-      if (attempt < 2) {
-        await new Promise(resolve =>
-          setTimeout(resolve, 800 * Math.pow(2, attempt))
-        );
+      console.error(
+        `Gemini attempt ${attempt + 1} failed:`,
+        error.message
+      );
+
+      const retryable =
+        !error.status ||
+        [408, 429, 500, 502, 503, 504].includes(error.status);
+
+      if (attempt === 0 && retryable) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      } else {
+        break;
       }
+
+    } finally {
+      clearTimeout(timeout);
     }
   }
 
   throw lastError || new Error("Gemini request failed.");
 }
+
 
 function parseJSON(text) {
   const cleaned = text
@@ -127,6 +168,7 @@ function parseJSON(text) {
   }
 }
 
+
 function languageInstruction(language) {
   if (language === "Hindi") {
     return "Write the explanation in simple Hindi.";
@@ -138,6 +180,7 @@ function languageInstruction(language) {
 
   return "Write the explanation in simple English.";
 }
+
 
 async function generateQuestion(body, apiKey, model) {
   const {
@@ -155,7 +198,8 @@ async function generateQuestion(body, apiKey, model) {
     difficulty
   } = body;
 
-  const selectedDifficulty = difficulty || level || "Adaptive";
+  const selectedDifficulty =
+    difficulty || level || "Adaptive";
 
   const prompt = `
 You are LearnLoop AI, an adaptive exam-preparation tutor.
@@ -184,22 +228,23 @@ ${mathNotation}
 INSTRUCTIONS:
 1. Match the student's class and educational level.
 2. Follow the requested textbook style.
-3. Use standard Indian school mathematical notation where relevant:
-   ×, ÷, √, π, ∠, △, ∥, ≤, ≥, fractions, powers and proper equations.
-4. Make the question conceptually correct and unambiguous.
-5. Do not repeat a recent question.
+3. Use standard Indian school mathematical notation:
+×, ÷, √, π, ∠, △, ∥, ≤, ≥, fractions and powers.
+4. Make the question accurate and unambiguous.
+5. Avoid repeating recent questions.
 6. Match the requested question format.
 7. For MCQs, provide exactly four options.
 8. For numerical questions, include units wherever needed.
-9. Give a useful hint without revealing the answer.
+9. Give a helpful hint without revealing the answer.
 10. Give a clear step-by-step explanation.
 11. Keep language appropriate for the student's class.
-12. Explain why this question and difficulty were selected using the learner profile. Do not invent learner history.
-13. If there is insufficient learner data, say the question is a foundation-level starting point.
+12. Explain why this question and difficulty were selected.
+13. Do not invent learner history.
+14. If learner data is insufficient, use a foundation-level starting question.
 
 ${languageInstruction(language)}
 
-RETURN ONLY VALID JSON IN THIS FORMAT:
+RETURN ONLY VALID JSON:
 {
   "question": "Question text",
   "format": "${format}",
@@ -211,14 +256,16 @@ RETURN ONLY VALID JSON IN THIS FORMAT:
   "correctAnswer": "Correct answer",
   "explanation": "Step-by-step explanation",
   "hint": "Helpful hint",
-  "decisionReason": "Why this question and difficulty were selected"
+  "decisionReason": "Why this question was selected"
 }
 `;
 
   const result = await askGemini(prompt, apiKey, model);
 
   if (!result.question || !(result.answer || result.correctAnswer)) {
-    throw new Error("AI generated an incomplete question. Please try again.");
+    throw new Error(
+      "AI generated an incomplete question. Please try again."
+    );
   }
 
   result.answer = result.answer || result.correctAnswer;
@@ -233,6 +280,7 @@ RETURN ONLY VALID JSON IN THIS FORMAT:
     question: result
   });
 }
+
 
 async function analyzeAnswer(body, apiKey, model) {
   const {
@@ -252,7 +300,9 @@ async function analyzeAnswer(body, apiKey, model) {
   } = body;
 
   const submittedAnswer = studentAnswer ?? answer ?? "";
-  const referenceAnswer = expectedAnswer ?? correctAnswer ?? "";
+
+  const referenceAnswer =
+    expectedAnswer ?? correctAnswer ?? "";
 
   if (!question || !String(submittedAnswer).trim()) {
     return json({
@@ -284,7 +334,7 @@ Topic: ${topic}
 Class / Year: ${grade}
 Textbook style: ${textbookStyle}
 Language: ${language}
-Confidence reported by student: ${confidence}
+Confidence: ${confidence}
 
 LEARNER PROFILE:
 ${JSON.stringify(learnerProfile)}
@@ -292,15 +342,15 @@ ${JSON.stringify(learnerProfile)}
 INSTRUCTIONS:
 1. Compare the student's answer with the reference answer.
 2. Accept mathematically equivalent answers.
-3. Do not mark an answer incorrect only because its wording differs.
-4. For numerical answers, check the calculation, units and method.
-5. Give partial credit when the main concept or method is correct.
-6. Identify a misconception only when there is evidence.
+3. Accept different wording when the meaning is correct.
+4. Check calculations, units and methods.
+5. Give partial credit when the main method is correct.
+6. Identify misconceptions only when supported by evidence.
 7. Explain the correct method in easy steps.
 8. Suggest one useful next learning action.
-9. Do not invent marks, history or learning evidence.
-10. Be encouraging, clear and educational.
-11. Use standard Indian textbook mathematical symbols where relevant.
+9. Do not invent marks or learning history.
+10. Be encouraging and educational.
+11. Use standard Indian textbook mathematical notation.
 12. Follow the requested explanation language.
 
 ${languageInstruction(language)}
@@ -308,7 +358,7 @@ ${languageInstruction(language)}
 RETURN ONLY VALID JSON:
 {
   "verdict": "correct",
-  "feedback": "Evaluation and explanation for the student",
+  "feedback": "Evaluation and explanation",
   "strength": "What the student understood",
   "misconception": "Observed misconception or None identified",
   "nextAction": "One recommended learning action"
@@ -320,7 +370,12 @@ correct, partial, incorrect, reviewed.
 
   const result = await askGemini(prompt, apiKey, model);
 
-  const allowed = ["correct", "partial", "incorrect", "reviewed"];
+  const allowed = [
+    "correct",
+    "partial",
+    "incorrect",
+    "reviewed"
+  ];
 
   const verdict = allowed.includes(result.verdict)
     ? result.verdict
@@ -329,9 +384,15 @@ correct, partial, incorrect, reviewed.
   const feedback = [
     `Result: ${verdict.toUpperCase()}`,
     result.feedback || "Your answer has been reviewed.",
-    result.strength ? `What you understood: ${result.strength}` : "",
-    result.misconception ? `Concept check: ${result.misconception}` : "",
-    result.nextAction ? `Next step: ${result.nextAction}` : ""
+    result.strength
+      ? `What you understood: ${result.strength}`
+      : "",
+    result.misconception
+      ? `Concept check: ${result.misconception}`
+      : "",
+    result.nextAction
+      ? `Next step: ${result.nextAction}`
+      : ""
   ].filter(Boolean).join("\n\n");
 
   return json({
