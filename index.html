@@ -3,771 +3,1175 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LearnLoop AI — Universal Adaptive Learning</title>
-
-<!-- KaTeX: Mathematical formula rendering -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<title>LearnLoop AI | Adaptive Learning Intelligence</title>
 
 <style>
-:root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#68738a;--line:#e8ecf3;--blue:#4f67e8;--green:#14866d;--orange:#f0a33a;--shadow:0 12px 32px #26345b0c}
+:root{
+  --bg:#f4f6fc;
+  --card:#fff;
+  --ink:#172033;
+  --muted:#738097;
+  --line:#e7ebf3;
+  --blue:#5268e8;
+  --purple:#8058d9;
+  --green:#16a477;
+  --orange:#ed9a38;
+  --red:#df626c;
+  --shadow:0 8px 28px rgba(30,45,90,.07);
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
-header{background:#fff;border-bottom:1px solid var(--line);padding:14px 5vw;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:5}
-.brand{display:flex;gap:11px;align-items:center;font-weight:800;font-size:19px}
-.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#5368ee,#18b89b);display:grid;place-items:center;color:white;font-weight:900}
-.pill,.tag{font-size:12px;background:#eef1ff;color:#4c5ed0;padding:6px 11px;border-radius:20px;font-weight:700}
-.wrap{max-width:1160px;margin:28px auto;padding:0 20px}
-.hero{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:22px}
-.eyebrow{color:var(--blue);font-weight:800;font-size:12px;letter-spacing:1.4px;text-transform:uppercase}
-.hero h1{font-size:30px;line-height:1.15;margin:7px 0}
-.sub{color:var(--muted);max-width:680px}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
-.tab{border:1px solid var(--line);background:#fff;color:var(--muted);padding:10px 14px;border-radius:11px;cursor:pointer;font-weight:700}
-.tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow)}
-.span3{grid-column:span 3}.span4{grid-column:span 4}.span5{grid-column:span 5}.span7{grid-column:span 7}.span8{grid-column:span 8}.span12{grid-column:span 12}
-.metric{font-size:28px;font-weight:850;margin-top:6px}
-.muted{color:var(--muted)}.small{font-size:12px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.bar{height:9px;background:#edf0f6;border-radius:9px;overflow:hidden;margin-top:9px}
-.fill{height:100%;background:linear-gradient(90deg,#5368ee,#16b89a);border-radius:9px}
-button,.btn{border:0;background:var(--blue);color:#fff;padding:11px 16px;border-radius:10px;font-weight:750;cursor:pointer}
-button:disabled{opacity:.45;cursor:not-allowed}
-.secondary{background:#eef1ff;color:#4b5ed4}
-.ghost{background:#f1f3f7;color:#46516a}
-h2{font-size:18px;margin:0 0 14px}
-h3{font-size:15px;margin:0 0 8px}
-.question{font-size:19px;font-weight:750;margin:12px 0 18px;overflow-wrap:anywhere}
-.option{display:block;border:1px solid var(--line);padding:12px 14px;border-radius:11px;margin:9px 0;cursor:pointer}
-.option:hover{border-color:#9aa7f4}
-.option input{margin-right:10px;width:auto}
-.feedback,.notice{margin-top:14px;padding:14px;border-radius:12px;background:#f2f5ff}
-.notice{background:#eaf8f5;border:1px solid #d4f0e9;color:#176e5b;font-size:13px}
-.ai-feedback{margin-top:15px;padding:17px;border-radius:13px;background:#eaf8f5;border:1px solid #cdeee5}
-.ai-feedback h3{color:#176e5b;margin-bottom:9px}
-.ai-feedback p{white-space:pre-wrap}
-.hidden{display:none!important}
-textarea,input,select{font:inherit;border:1px solid var(--line);border-radius:10px;padding:11px;width:100%;background:#fff;color:var(--ink)}
-textarea{min-height:76px;resize:vertical}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+header{
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  padding:16px 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  color:#fff;width:43px;height:43px;border-radius:13px;
+  display:grid;place-items:center;font-size:22px;font-weight:800;
+}
+.brand h2{margin:0;font-size:20px}
+.brand small{color:var(--muted);font-size:10px;letter-spacing:1.5px}
+.header-right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pill{
+  background:#f0f2ff;color:var(--blue);
+  border-radius:30px;padding:9px 14px;font-size:12px;font-weight:700;
+}
+main{max-width:1250px;margin:28px auto;padding:0 20px}
+.hero{
+  background:linear-gradient(120deg,#263d92,#7353d3);
+  color:white;padding:30px;border-radius:20px;
+  display:flex;justify-content:space-between;gap:20px;
+  align-items:center;flex-wrap:wrap;margin-bottom:22px;
+}
+.hero h1{font-size:30px;margin:0 0 10px}
+.hero p{margin:0;color:#e0e5ff;max-width:620px;line-height:1.6}
+.hero-badge{
+  background:#ffffff20;border:1px solid #ffffff40;
+  padding:15px 20px;border-radius:14px;font-size:13px;
+}
+.tabs{
+  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;
+  background:#fff;padding:9px;border-radius:14px;
+  border:1px solid var(--line);
+}
+.tab{
+  border:0;background:transparent;padding:11px 16px;
+  border-radius:9px;color:var(--muted);font-weight:700;
+}
+.tab.active{background:#edf0ff;color:var(--blue)}
+.panel{display:none}
+.panel.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:17px}
+.card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:16px;padding:20px;box-shadow:var(--shadow);
+  min-width:0;
+}
+.span-12{grid-column:span 12}
+.span-8{grid-column:span 8}
+.span-6{grid-column:span 6}
+.span-4{grid-column:span 4}
+.span-3{grid-column:span 3}
+.card h3{margin:0 0 15px;font-size:16px}
+.muted{color:var(--muted);font-size:13px;line-height:1.6}
+.metric{font-size:30px;font-weight:800;margin:8px 0}
+.metric-label{color:var(--muted);font-size:12px}
+.progress{
+  height:9px;background:#edf0f6;border-radius:20px;overflow:hidden;
+  margin-top:10px;
+}
+.progress span{
+  display:block;height:100%;width:0%;
+  background:linear-gradient(90deg,var(--blue),var(--purple));
+  border-radius:20px;transition:width .4s;
+}
+label{font-size:12px;font-weight:700;color:#526078;display:block;margin-bottom:7px}
+input,select,textarea{
+  width:100%;border:1px solid #dfe4ef;border-radius:10px;
+  padding:12px;background:#fff;color:var(--ink);outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--blue)}
+textarea{resize:vertical;min-height:85px}
+.field{margin-bottom:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{
+  border:0;border-radius:10px;padding:12px 17px;
+  font-weight:700;background:var(--blue);color:white;
+}
+.btn:hover{filter:brightness(.96)}
+.btn.secondary{background:#edf0ff;color:var(--blue)}
+.btn.green{background:var(--green)}
+.btn.orange{background:#fff1df;color:#a96813}
+.btn:disabled{opacity:.55;cursor:not-allowed}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
-.field{margin:10px 0}
-.field label{display:block;font-weight:700;font-size:13px;margin-bottom:6px}
-.topic{padding:12px 0;border-bottom:1px solid var(--line)}
-.topic:last-child{border:0}
-footer{text-align:center;color:#8a93a6;padding:30px;font-size:12px}
-.katex-display{overflow-x:auto;overflow-y:hidden;padding:5px 0}
-@media(max-width:760px){
-.hero{display:block}
-.hero .pill{display:inline-block;margin-top:12px}
-.span3,.span4,.span5,.span7,.span8{grid-column:span 12}
-.hero h1{font-size:25px}
-header{padding:12px 18px}
-.row{align-items:flex-start;flex-wrap:wrap}
+.question-box{
+  background:#f7f8ff;border:1px solid #e5e8fb;
+  padding:18px;border-radius:13px;margin:15px 0;
+  line-height:1.7;font-size:16px;
+}
+.option{
+  display:block;width:100%;text-align:left;margin:8px 0;
+  padding:12px;border:1px solid var(--line);border-radius:10px;
+  background:white;color:var(--ink);
+}
+.option:hover{border-color:var(--blue);background:#f7f8ff}
+.option.selected{border:2px solid var(--blue);background:#eff1ff}
+.tag{
+  display:inline-block;padding:5px 9px;border-radius:20px;
+  font-size:10px;font-weight:800;background:#edf0ff;color:var(--blue);
+  margin:3px;
+}
+.tag.green{background:#e6f8f1;color:#13845f}
+.tag.orange{background:#fff2df;color:#a76b1c}
+.result{
+  white-space:pre-wrap;line-height:1.7;background:#f7f8fc;
+  border-radius:12px;padding:17px;margin-top:15px;font-size:14px;
+}
+.sensor{
+  padding:16px;background:#f8f9fd;border-radius:12px;
+}
+.sensor strong{font-size:23px;display:block;margin:9px 0}
+.sensor small{color:var(--muted)}
+.sensor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.badge{
+  padding:14px;border-radius:12px;background:#f7f8fc;
+  border:1px solid var(--line);font-size:13px;
+}
+.badge strong{display:block;margin-bottom:6px}
+.badge.locked{opacity:.45}
+.list-item{
+  padding:12px 0;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:12px;
+  align-items:center;font-size:13px;
+}
+.status{font-size:11px;font-weight:800;color:var(--green)}
+footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
+.notice{
+  background:#fff8e9;border:1px solid #f6e5bd;
+  color:#88601e;padding:12px;border-radius:10px;
+  font-size:12px;line-height:1.6;margin:12px 0;
+}
+#toast{
+  position:fixed;bottom:20px;right:20px;background:#172033;
+  color:white;padding:13px 18px;border-radius:10px;
+  display:none;z-index:10;font-size:13px;
+}
+@media(max-width:800px){
+ .span-8,.span-6,.span-4,.span-3{grid-column:span 12}
+ .sensor-grid{grid-template-columns:1fr}
+ .hero h1{font-size:24px}
 }
 </style>
 </head>
 
 <body>
+
 <header>
-  <div class="brand"><div class="logo">L</div>LearnLoop <span style="color:var(--blue)">AI</span></div>
-  <span class="pill">UNIVERSAL ADAPTIVE LEARNING</span>
+  <div class="brand">
+    <div class="logo">L</div>
+    <div>
+      <h2>LearnLoop AI</h2>
+      <small>ADAPTIVE LEARNING INTELLIGENCE</small>
+    </div>
+  </div>
+  <div class="header-right">
+    <span class="pill" id="connection">● Checking connection</span>
+    <span class="pill">⚡ <span id="xpHeader">0</span> XP</span>
+  </div>
 </header>
 
-<main class="wrap">
+<main>
+
 <section class="hero">
   <div>
-    <div class="eyebrow">One learning companion • many learning journeys</div>
-    <h1>Learn smarter, at your own level.</h1>
-    <div class="sub">An AI study companion that adapts practice to your education level, subject, topic, answers and confidence. Choose what you are learning and build a learner profile as you practise.</div>
+    <h1>Learning that understands you.</h1>
+    <p>
+      An adaptive AI tutor that learns from your progress,
+      identifies knowledge gaps and chooses your next learning step.
+    </p>
   </div>
-  <div class="pill">⚡ AI-powered study engine</div>
-</section>
-
-<section class="card" style="margin-bottom:18px">
-  <div class="row"><h2>Set your learning context</h2><span class="tag">Personal learning profile</span></div>
-  <div class="grid">
-    <div class="field span3">
-      <label for="education">Education level</label>
-      <select id="education" onchange="updateLevelOptions()">
-        <option value="School">School</option>
-        <option value="College">College / University</option>
-      </select>
-    </div>
-    <div class="field span3">
-      <label for="grade">Class / year</label>
-      <select id="grade"></select>
-    </div>
-    <div class="field span3">
-      <label for="subject">Subject</label>
-      <select id="subject">
-        <option>Mathematics</option><option>Physics</option><option>Chemistry</option>
-        <option>Biology</option><option>Science</option><option>Computer Science</option>
-        <option>English</option><option>History</option><option>Geography</option>
-        <option>Economics</option><option>Political Science</option>
-        <option>Business Studies</option><option>Accountancy</option>
-        <option>Psychology</option><option>Other</option>
-      </select>
-    </div>
-    <div class="field span3">
-      <label for="topic">Chapter / topic</label>
-      <input id="topic" placeholder="e.g. Linear equations, Cell biology">
-    </div>
-  </div>
-  <div class="actions">
-    <button onclick="applyProfile()">Use this learning profile →</button>
-    <span id="profileStatus" class="muted small" style="align-self:center">Choose your level, subject and topic to begin.</span>
+  <div class="hero-badge">
+    🧠 DIGITAL TWIN ENABLED<br><br>
+    ⚡ LOCAL LEARNER INTELLIGENCE
   </div>
 </section>
 
 <nav class="tabs">
-  <button class="tab active" data-page="overview">Overview</button>
-  <button class="tab" data-page="practice">AI practice</button>
-  <button class="tab" data-page="revision">Revision plan</button>
-  <button class="tab" data-page="teacher">Teacher view</button>
+  <button class="tab active" data-tab="overview">Overview</button>
+  <button class="tab" data-tab="practice">AI Practice</button>
+  <button class="tab" data-tab="twin">Digital Twin</button>
+  <button class="tab" data-tab="environment">IoT Lab</button>
+  <button class="tab" data-tab="insights">AI Insights</button>
+  <button class="tab" data-tab="revision">Revision Vault</button>
 </nav>
 
-<section id="overview" class="page">
+<!-- OVERVIEW -->
+
+<section class="panel active" id="overview">
   <div class="grid">
-    <div class="card span3">
-      <div class="muted small">PROFILE MASTERY</div>
-      <div class="metric" id="mastery">0%</div>
-      <div class="bar"><div class="fill" id="masteryBar" style="width:0%"></div></div>
+
+    <div class="card span-3">
+      <div class="metric" id="attemptCount">0</div>
+      <div class="metric-label">Questions attempted</div>
     </div>
-    <div class="card span3">
-      <div class="muted small">QUESTIONS ATTEMPTED</div>
-      <div class="metric" id="attempts">0</div>
-      <div class="muted small">For this learning profile</div>
+
+    <div class="card span-3">
+      <div class="metric" id="masteryMetric">0%</div>
+      <div class="metric-label">Estimated mastery</div>
     </div>
-    <div class="card span3">
-      <div class="muted small">CORRECT / VERIFIED</div>
-      <div class="metric" id="correct">0</div>
-      <div class="muted small">Recorded evidence</div>
+
+    <div class="card span-3">
+      <div class="metric" id="xpMetric">0</div>
+      <div class="metric-label">Learning XP</div>
     </div>
-    <div class="card span3">
-      <div class="muted small">REVISION STATUS</div>
-      <div class="metric" id="revisionStatus">New</div>
-      <div class="muted small">Based on your attempts</div>
+
+    <div class="card span-3">
+      <div class="metric" id="savedCount">0</div>
+      <div class="metric-label">Saved questions</div>
     </div>
-    <div class="card span7">
-      <h2>Your learning snapshot</h2>
-      <div id="snapshot" class="notice">Select a class or college year, subject and topic above. LearnLoop will create a separate progress profile for that combination.</div>
+
+    <div class="card span-8">
+      <h3>🎯 Your learning journey</h3>
+      <p class="muted">Your progress is calculated from your saved practice history on this device.</p>
+      <div class="progress"><span id="mainProgress"></span></div>
+      <p class="muted" id="progressText">Start practising to build your learner profile.</p>
     </div>
-    <div class="card span5">
-      <h2>How LearnLoop adapts</h2>
-      <p class="muted small">1. You choose what you are learning.<br>2. AI generates a fresh question at the selected level.<br>3. You answer and explain your thinking.<br>4. Your progress and revision priority update from recorded evidence.</p>
-      <button onclick="go('practice')">Start AI practice →</button>
+
+    <div class="card span-4">
+      <h3>🏆 Achievement level</h3>
+      <div class="metric" id="levelMetric">Level 1</div>
+      <p class="muted" id="levelText">Learning Explorer</p>
+      <div class="progress"><span id="xpProgress"></span></div>
     </div>
-    <div class="card span12">
-      <h2>Learning evidence</h2>
-      <div id="evidence" class="muted small">No attempts yet.</div>
+
+    <div class="card span-6">
+      <h3>🧭 Today's learning mission</h3>
+      <div class="question-box" id="mission">
+        Complete your first AI-generated practice question.
+      </div>
+      <span class="tag green">PERSONALIZED MISSION</span>
     </div>
+
+    <div class="card span-6">
+      <h3>🧠 Current learner status</h3>
+      <div id="learnerStatus" class="muted">
+        Your learning profile will become more informative as you practise.
+      </div>
+    </div>
+
+    <div class="card span-12">
+      <h3>🚀 Start learning</h3>
+      <p class="muted">Choose a subject and topic to begin your adaptive learning session.</p>
+      <button class="btn" onclick="switchTab('practice')">Start AI Practice →</button>
+    </div>
+
   </div>
 </section>
 
-<section id="practice" class="page hidden">
+<!-- PRACTICE -->
+
+<section class="panel" id="practice">
   <div class="grid">
-    <div class="card span8">
-      <div class="row"><h2>Adaptive AI practice</h2><span class="tag" id="levelTag">Ready when you are</span></div>
-      <div class="grid">
-        <div class="field span5">
-          <label for="format">Question format</label>
-          <select id="format">
-            <option>MCQ</option><option>Numerical</option>
-            <option>Assertion-Reason</option><option>Case-Based</option>
-            <option>Real-Life Application</option><option>What-If</option>
-            <option>Prediction</option><option>Error Detection</option><option>HOTS</option>
-          </select>
+
+    <div class="card span-4">
+      <h3>⚙️ Learning setup</h3>
+
+      <div class="field">
+        <label>Education level</label>
+        <select id="education">
+          <option>School</option>
+          <option>College</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Class / Year</label>
+        <select id="grade">
+          <option>Class 10</option>
+          <option>Class 11</option>
+          <option>Class 12</option>
+          <option>Year 1</option>
+          <option>Year 2</option>
+          <option>Year 3</option>
+          <option>Year 4</option>
+          <option>Year 5</option>
+          <option>Year 6</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Subject</label>
+        <select id="subject">
+          <option>Physics</option>
+          <option>Mathematics</option>
+          <option>Chemistry</option>
+          <option>Biology</option>
+          <option>Science</option>
+          <option>Computer Science</option>
+          <option>English</option>
+          <option>History</option>
+          <option>Geography</option>
+          <option>Economics</option>
+          <option>Political Science</option>
+          <option>Business Studies</option>
+          <option>Accountancy</option>
+          <option>Psychology</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Topic</label>
+        <input id="topic" placeholder="e.g. Laws of Motion">
+      </div>
+
+      <div class="field">
+        <label>Question format</label>
+        <select id="format">
+          <option>MCQ</option>
+          <option>Numerical</option>
+          <option>Assertion-Reason</option>
+          <option>Case-Based</option>
+          <option>Real-Life Application</option>
+          <option>What-If</option>
+          <option>Prediction</option>
+          <option>Error Detection</option>
+          <option>HOTS</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Difficulty preference</label>
+        <select id="difficulty">
+          <option>Adaptive</option>
+          <option>Foundation</option>
+          <option>Intermediate</option>
+          <option>Advanced</option>
+          <option>Challenge</option>
+        </select>
+      </div>
+
+      <button class="btn" id="generateBtn" onclick="generateQuestion()">
+        ✨ Generate AI Question
+      </button>
+      <p class="muted" id="aiStatus">AI adapts questions using your learning history.</p>
+    </div>
+
+    <div class="card span-8">
+      <h3>📖 Adaptive practice workspace</h3>
+      <div id="questionArea">
+        <div class="question-box">
+          Your next question will appear here.<br><br>
+          Select your subject and topic, then click Generate AI Question.
         </div>
-        <div class="field span4">
-          <label for="difficulty">Difficulty</label>
-          <select id="difficulty">
-            <option>Adaptive</option><option>Foundation</option>
-            <option>Intermediate</option><option>Advanced</option><option>Challenge</option>
-          </select>
-        </div>
-        <div class="field span3">
-          <label for="confidence">Confidence</label>
+      </div>
+
+      <div id="answerArea" style="display:none">
+        <label>Your answer</label>
+        <textarea id="studentAnswer" placeholder="Write your answer here..."></textarea>
+
+        <div class="field" style="margin-top:12px">
+          <label>How confident are you?</label>
           <select id="confidence">
-            <option value="High">High</option>
-            <option value="Medium" selected>Medium</option>
-            <option value="Low">Low</option>
+            <option>High</option>
+            <option selected>Medium</option>
+            <option>Low</option>
           </select>
         </div>
-      </div>
-      <div id="practiceBox">
-        <p class="muted">First select your learning profile, then generate your first question.</p>
-        <button onclick="generateQuestion()">Generate my question →</button>
-      </div>
-    </div>
-    <div class="card span4">
-      <h2>Why this question?</h2>
-      <div id="why" class="notice">LearnLoop will use your selected subject, topic, level and previous attempts to personalise practice.</div>
-      <p class="muted small" style="margin-top:14px">Tip: Explain your reasoning in your own words. A correct answer alone is not proof of full mastery.</p>
-    </div>
-  </div>
-</section>
 
-<section id="revision" class="page hidden">
-  <div class="grid">
-    <div class="card span7">
-      <h2>Your revision plan</h2>
-      <p class="muted small">Revision priority is an estimate based on your recorded attempts and recent performance.</p>
-      <div id="revisionList"></div>
-    </div>
-    <div class="card span5">
-      <h2>Learning data</h2>
-      <p class="muted small">Your learner profile is stored in this browser. It is not automatically shared with a teacher.</p>
+        <button class="btn green" id="submitBtn" onclick="submitAnswer()">
+          Submit for AI Evaluation
+        </button>
+      </div>
+
+      <div id="feedbackArea"></div>
+
       <div class="actions">
-        <button class="secondary" onclick="exportData()">Export learner data</button>
-        <button class="ghost" onclick="resetCurrent()">Reset current profile</button>
+        <button class="btn secondary" id="hintBtn" onclick="showHint()" disabled>💡 Show Hint</button>
+        <button class="btn secondary" id="saveBtn" onclick="saveQuestion()" disabled>🔖 Save Question</button>
+        <button class="btn secondary" onclick="loadSavedPractice()">📚 Open Saved Questions</button>
       </div>
-      <div class="notice" style="margin-top:16px">Your previous Class 10 Physics data under the older LearnLoop version is left untouched in this browser.</div>
+
+      <div class="notice">
+        AI-generated educational feedback may occasionally be inaccurate.
+        Verify important exam concepts with your textbook or teacher.
+      </div>
     </div>
+
   </div>
 </section>
 
-<section id="teacher" class="page hidden">
+<!-- DIGITAL TWIN -->
+
+<section class="panel" id="twin">
   <div class="grid">
-    <div class="card span12">
-      <div class="row">
-        <div>
-          <h2>Teacher insight preview</h2>
-          <p class="muted small">This browser-only prototype does not contain a real class roster or shared student records.</p>
-        </div>
-        <span class="tag">DEMO / LOCAL PROFILE</span>
-      </div>
-      <div class="notice">A teacher dashboard with real class trends requires student accounts, consent, and a shared database. This view only shows the currently selected local learner profile.</div>
+
+    <div class="card span-12">
+      <h3>🧠 Your Digital Learning Twin</h3>
+      <p class="muted">
+        A continuously updated learner profile built from your practice history.
+        It represents estimated learning progress, not a complete psychological profile.
+      </p>
+      <span class="tag green">LOCAL LEARNER MODEL</span>
+      <span class="tag">UPDATED FROM PRACTICE</span>
     </div>
-    <div class="card span4">
-      <div class="muted small">SELECTED LEARNER PROFILE</div>
-      <div class="metric" id="teacherProfile">Not set</div>
+
+    <div class="card span-4">
+      <h3>Overall mastery</h3>
+      <div class="metric" id="twinMastery">0%</div>
+      <div class="progress"><span id="twinProgress"></span></div>
     </div>
-    <div class="card span4">
-      <div class="muted small">ATTEMPTS</div>
-      <div class="metric" id="teacherAttempts">0</div>
+
+    <div class="card span-4">
+      <h3>Learning evidence</h3>
+      <div class="metric" id="twinAttempts">0</div>
+      <p class="muted">Recorded attempts</p>
     </div>
-    <div class="card span4">
-      <div class="muted small">RECORDED ACCURACY</div>
-      <div class="metric" id="teacherAccuracy">—</div>
+
+    <div class="card span-4">
+      <h3>Learning profile</h3>
+      <div class="metric" id="twinLevel">Beginner</div>
+      <p class="muted">Estimated from recorded evidence</p>
     </div>
-    <div class="card span12">
-      <h2>Current learning focus</h2>
-      <div id="teacherFocus" class="muted">Select a learning profile to see its progress here.</div>
+
+    <div class="card span-6">
+      <h3>💪 Strengths</h3>
+      <div id="strengths" class="muted">Not enough practice data yet.</div>
     </div>
+
+    <div class="card span-6">
+      <h3>🎯 Improvement areas</h3>
+      <div id="weaknesses" class="muted">Not enough practice data yet.</div>
+    </div>
+
+    <div class="card span-12">
+      <h3>How your Digital Twin works</h3>
+      <div class="list-item"><span>Practice history</span><span class="status">LOCAL DATA</span></div>
+      <div class="list-item"><span>AI feedback</span><span class="status">GEMINI ANALYSIS</span></div>
+      <div class="list-item"><span>Mastery estimation</span><span class="status">BROWSER PROCESSING</span></div>
+      <div class="list-item"><span>Next learning recommendation</span><span class="status">ADAPTIVE</span></div>
+    </div>
+
   </div>
 </section>
+
+<!-- IOT -->
+
+<section class="panel" id="environment">
+  <div class="grid">
+
+    <div class="card span-12">
+      <h3>🌐 Smart Learning Environment</h3>
+      <p class="muted">
+        A simulated IoT environment demonstrating how environmental signals
+        could support a future connected learning space.
+      </p>
+      <span class="tag orange">SIMULATED SENSOR DATA</span>
+      <span class="tag">NO PHYSICAL SENSORS CONNECTED</span>
+    </div>
+
+    <div class="card span-12">
+      <div class="sensor-grid">
+        <div class="sensor">
+          🔊 Noise level
+          <strong id="noise">-- dB</strong>
+          <small>Simulated sound sensor</small>
+        </div>
+        <div class="sensor">
+          💡 Brightness
+          <strong id="brightness">-- lux</strong>
+          <small>Simulated light sensor</small>
+        </div>
+        <div class="sensor">
+          🌡️ Temperature
+          <strong id="temperature">-- °C</strong>
+          <small>Simulated temperature sensor</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="card span-6">
+      <h3>Environment status</h3>
+      <div class="metric" id="environmentStatus">Initializing</div>
+      <p class="muted" id="environmentMessage">
+        Simulated environment readings will update automatically.
+      </p>
+    </div>
+
+    <div class="card span-6">
+      <h3>💡 Smart environment suggestion</h3>
+      <div class="question-box" id="environmentTip">
+        Waiting for simulated sensor readings.
+      </div>
+      <p class="muted">These suggestions are based only on simulated environmental values.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- INSIGHTS -->
+
+<section class="panel" id="insights">
+  <div class="grid">
+
+    <div class="card span-12">
+      <h3>🔍 Explainable AI & Predictive Analytics</h3>
+      <p class="muted">
+        LearnLoop explains its learning recommendations and estimates possible
+        knowledge gaps from your recorded practice evidence.
+      </p>
+    </div>
+
+    <div class="card span-6">
+      <h3>Why was this question selected?</h3>
+      <div class="question-box" id="decisionReason">
+        Generate a question to see the AI's selection reason.
+      </div>
+    </div>
+
+    <div class="card span-6">
+      <h3>📊 Predictive learning insights</h3>
+      <div id="prediction" class="muted">
+        More practice data is needed to make useful estimates.
+      </div>
+    </div>
+
+    <div class="card span-12">
+      <h3>⚡ Edge intelligence</h3>
+      <p class="muted">
+        LearnLoop calculates progress, XP, mastery estimates and learning
+        history locally in your browser. Your local learner profile is stored
+        on this device. Gemini is used when you request AI generation or evaluation.
+      </p>
+      <span class="tag green">LOCAL PROCESSING ACTIVE</span>
+      <span class="tag">NO SEPARATE EDGE HARDWARE</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- REVISION -->
+
+<section class="panel" id="revision">
+  <div class="grid">
+
+    <div class="card span-12">
+      <h3>📚 Revision Vault</h3>
+      <p class="muted">
+        Questions saved on this device remain available for revision without
+        requesting a new AI response.
+      </p>
+      <div class="actions">
+        <button class="btn secondary" onclick="loadSavedPractice()">Load saved questions</button>
+        <button class="btn secondary" onclick="exportData()">Export learner data</button>
+      </div>
+    </div>
+
+    <div class="card span-12">
+      <h3>Saved questions</h3>
+      <div id="savedList" class="muted">No saved questions yet.</div>
+    </div>
+
+    <div class="card span-12">
+      <h3>🏅 Your achievements</h3>
+      <div class="grid">
+        <div class="badge locked" id="badgeFirst">🌱 <strong>First Step</strong>Complete your first attempt</div>
+        <div class="badge locked" id="badgeFive">🔥 <strong>Practice Builder</strong>Complete five attempts</div>
+        <div class="badge locked" id="badgeTen">🚀 <strong>Knowledge Explorer</strong>Complete ten attempts</div>
+        <div class="badge locked" id="badgeSave">📚 <strong>Revision Ready</strong>Save your first question</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 </main>
 
-<footer>LearnLoop AI • Universal adaptive learning prototype • AI learning support; verify important academic content with your course material.</footer>
+<footer>
+  LearnLoop AI · Adaptive Exam-Prep Tutor · Student Hackathon Prototype
+  <br><br>
+  Learning insights are estimates, not guaranteed predictions.
+  <br>© LearnLoop AI
+</footer>
+
+<div id="toast"></div>
 
 <script>
+const API = "/.netlify/functions/analyze";
 const STORAGE_KEY = "learnloop-universal-v1";
-const $ = id => document.getElementById(id);
 
-let db = {};
-let profileKey = "";
-let profile = null;
+let state = loadState();
 let currentQuestion = null;
-let busy = false;
+let selectedOption = "";
+let currentHint = "";
+let environmentData = {};
 
-function freshProfile(){
+function defaultState(){
   return {
-    attempts:0,
-    correct:0,
-    history:[],
-    due:null,
-    confidence:{
-      High:{n:0,correct:0},
-      Medium:{n:0,correct:0},
-      Low:{n:0,correct:0}
-    }
+    attempts:[],
+    saved:[],
+    xp:0,
+    topics:{},
+    lastActive:null
   };
 }
 
-try {
-  db = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-} catch {
-  db = {};
-}
-
-function renderMath(target=document.body){
-  if(typeof renderMathInElement === "function"){
-    renderMathInElement(target,{
-      delimiters:[
-        {left:"$$",right:"$$",display:true},
-        {left:"\\[",right:"\\]",display:true},
-        {left:"\\(",right:"\\)",display:false},
-        {left:"$",right:"$",display:false}
-      ],
-      throwOnError:false,
-      ignoredTags:["script","noscript","style","textarea","pre","code"]
-    });
+function loadState(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return saved ? {...defaultState(),...saved} : defaultState();
+  }catch{
+    return defaultState();
   }
 }
 
-function updateLevelOptions(){
-  const education = $("education").value;
-
-  $("grade").innerHTML = education === "School"
-    ? Array.from({length:7},(_,i)=>`<option value="Class ${i+6}">Class ${i+6}</option>`).join("")
-    : Array.from({length:6},(_,i)=>`<option value="College Year ${i+1}">College Year ${i+1}</option>`).join("");
+function persist(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
 }
 
-function keyFor(){
-  return [
-    $("education").value,
-    $("grade").value,
-    $("subject").value,
-    $("topic").value.trim().toLowerCase()
-  ].join("::");
+function toast(message){
+  const el=document.getElementById("toast");
+  el.textContent=message;
+  el.style.display="block";
+  clearTimeout(window.toastTimer);
+  window.toastTimer=setTimeout(()=>el.style.display="none",2600);
 }
 
-function applyProfile(){
-  const topic = $("topic").value.trim();
+function switchTab(id){
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+
+  document.getElementById(id).classList.add("active");
+  document.querySelector(`[data-tab="${id}"]`).classList.add("active");
+
+  refresh();
+}
+
+document.querySelectorAll(".tab").forEach(btn=>{
+  btn.addEventListener("click",()=>switchTab(btn.dataset.tab));
+});
+
+function getTopicStats(){
+  const stats={};
+
+  state.attempts.forEach(a=>{
+    const key=a.topic || "General";
+
+    if(!stats[key]){
+      stats[key]={total:0,correct:0,partial:0};
+    }
+
+    stats[key].total++;
+    if(a.result==="correct") stats[key].correct++;
+    if(a.result==="partial") stats[key].partial++;
+  });
+
+  return stats;
+}
+
+function getMastery(){
+  if(!state.attempts.length) return 0;
+
+  const total=state.attempts.length;
+  const score=state.attempts.reduce((sum,a)=>{
+    return sum+(a.result==="correct"?1:a.result==="partial"?.5:0);
+  },0);
+
+  return Math.round(score/total*100);
+}
+
+function getDigitalTwin(){
+  const stats=getTopicStats();
+
+  return {
+    totalAttempts:state.attempts.length,
+    estimatedMastery:getMastery(),
+    xp:state.xp,
+    topicPerformance:stats,
+    strengths:Object.entries(stats)
+      .filter(([k,v])=>v.correct/v.total>=.7)
+      .map(([k])=>k),
+    improvementAreas:Object.entries(stats)
+      .filter(([k,v])=>(v.correct+v.partial*.5)/v.total<.5)
+      .map(([k])=>k)
+  };
+}
+
+function refresh(){
+  const mastery=getMastery();
+  const attempts=state.attempts.length;
+  const level=Math.floor(state.xp/100)+1;
+
+  document.getElementById("attemptCount").textContent=attempts;
+  document.getElementById("masteryMetric").textContent=mastery+"%";
+  document.getElementById("xpMetric").textContent=state.xp;
+  document.getElementById("xpHeader").textContent=state.xp;
+  document.getElementById("savedCount").textContent=state.saved.length;
+
+  document.getElementById("mainProgress").style.width=mastery+"%";
+  document.getElementById("progressText").textContent=
+    attempts ? `${attempts} practice attempts recorded. Estimated mastery: ${mastery}%.`
+    : "Start practising to build your learner profile.";
+
+  document.getElementById("levelMetric").textContent="Level "+level;
+  document.getElementById("levelText").textContent=
+    level>=5?"Advanced Explorer":level>=3?"Active Learner":"Learning Explorer";
+
+  document.getElementById("xpProgress").style.width=(state.xp%100)+"%";
+
+  document.getElementById("twinMastery").textContent=mastery+"%";
+  document.getElementById("twinProgress").style.width=mastery+"%";
+  document.getElementById("twinAttempts").textContent=attempts;
+  document.getElementById("twinLevel").textContent=
+    mastery>=75?"Strong":mastery>=45?"Developing":"Beginner";
+
+  const stats=getTopicStats();
+  const entries=Object.entries(stats);
+
+  const strengths=entries.filter(([k,v])=>v.correct/v.total>=.7);
+  const weaknesses=entries.filter(([k,v])=>(v.correct+v.partial*.5)/v.total<.5);
+
+  document.getElementById("strengths").textContent=
+    strengths.length?strengths.map(x=>x[0]).join(", "):"Not enough evidence of strong topics yet.";
+
+  document.getElementById("weaknesses").textContent=
+    weaknesses.length?weaknesses.map(x=>x[0]).join(", "):"No clear weak topic identified yet.";
+
+  document.getElementById("learnerStatus").textContent=
+    attempts
+    ? `You have completed ${attempts} attempts. Your current estimated mastery is ${mastery}%. Your learner model updates after each evaluated answer.`
+    : "Your learner model is waiting for its first practice attempt.";
+
+  document.getElementById("prediction").textContent=
+    entries.length
+    ? entries.map(([k,v])=>{
+        const rate=Math.round((v.correct+v.partial*.5)/v.total*100);
+        return `${k}: ${rate}% estimated performance across ${v.total} attempt(s). ${rate<50?"Consider revising this topic.":rate<75?"More practice may help.":"Current evidence suggests a relative strength."}`;
+      }).join("\n\n")
+    : "Not enough practice evidence yet. Complete questions in different topics to build useful estimates.";
+
+  document.getElementById("mission").textContent=
+    attempts<1?"Complete your first AI-generated practice question."
+    :attempts<5?`Complete ${5-attempts} more practice attempt(s) to reach your first practice milestone.`
+    : "Keep practising a different topic to strengthen your learner model.";
+
+  document.getElementById("badgeFirst").classList.toggle("locked",attempts<1);
+  document.getElementById("badgeFive").classList.toggle("locked",attempts<5);
+  document.getElementById("badgeTen").classList.toggle("locked",attempts<10);
+  document.getElementById("badgeSave").classList.toggle("locked",state.saved.length<1);
+
+  renderSaved();
+}
+
+function learnerProfile(){
+  const stats=getTopicStats();
+  const topic=document.getElementById("topic").value.trim();
+
+  return {
+    mastery:getMastery(),
+    attempts:state.attempts.length,
+    xp:state.xp,
+    topicPerformance:stats,
+    currentTopic:topic,
+    strengths:getDigitalTwin().strengths,
+    weaknesses:getDigitalTwin().improvementAreas
+  };
+}
+
+function getAdaptiveLevel(){
+  const preference=document.getElementById("difficulty").value;
+  if(preference!=="Adaptive") return preference;
+
+  const mastery=getMastery();
+
+  if(state.attempts.length<2) return "Foundation";
+  if(mastery<40) return "Foundation";
+  if(mastery<65) return "Intermediate";
+  if(mastery<85) return "Advanced";
+  return "Challenge";
+}
+
+async function callAI(payload){
+  const response=await fetch(API,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(payload)
+  });
+
+  const data=await response.json();
+
+  if(!response.ok || !data.success){
+    throw new Error(data.error || "AI request failed.");
+  }
+
+  return data;
+}
+
+async function generateQuestion(){
+  const topic=document.getElementById("topic").value.trim();
 
   if(!topic){
-    alert("Please enter a chapter or topic.");
-    $("topic").focus();
+    toast("Please enter a topic first.");
     return;
   }
 
-  profileKey = keyFor();
+  const btn=document.getElementById("generateBtn");
+  btn.disabled=true;
+  btn.textContent="Generating...";
 
-  if(!db[profileKey]) db[profileKey] = freshProfile();
+  document.getElementById("aiStatus").textContent=
+    "LearnLoop is analysing your learner profile...";
 
-  profile = db[profileKey];
+  try{
+    const level=getAdaptiveLevel();
 
-  $("profileStatus").textContent =
-    `${$("grade").value} • ${$("subject").value} • ${topic}`;
+    const data=await callAI({
+      action:"generateQuestion",
+      educationLevel:document.getElementById("education").value,
+      grade:document.getElementById("grade").value,
+      subject:document.getElementById("subject").value,
+      topic,
+      format:document.getElementById("format").value,
+      level,
+      difficulty:level,
+      learnerProfile:learnerProfile(),
+      digitalTwin:getDigitalTwin(),
+      environment:environmentData,
+      recentQuestions:state.attempts.slice(-5).map(a=>a.question)
+    });
 
-  $("why").textContent =
-    `Selected focus: ${$("subject").value} — ${topic}. Questions will be generated for ${$("grade").value}.`;
+    currentQuestion=data.question;
+    currentHint=currentQuestion.hint || "";
+    selectedOption="";
 
-  renderAll();
+    renderQuestion();
+
+    document.getElementById("aiStatus").textContent=
+      "AI question generated successfully.";
+
+    document.getElementById("decisionReason").textContent=
+      currentQuestion.decisionReason ||
+      `The question was generated for ${topic} at ${level} difficulty using your available learner profile.`;
+
+    toast("Your adaptive question is ready!");
+
+  }catch(error){
+    document.getElementById("aiStatus").textContent=error.message;
+    toast(error.message);
+  }finally{
+    btn.disabled=false;
+    btn.textContent="✨ Generate AI Question";
+  }
 }
 
-function save(){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(db));
-  renderAll();
+function renderQuestion(){
+  if(!currentQuestion) return;
+
+  const area=document.getElementById("questionArea");
+
+  area.innerHTML=`
+    <span class="tag">${escapeHTML(currentQuestion.format||"Practice")}</span>
+    <span class="tag green">${escapeHTML(currentQuestion.level||"Adaptive")}</span>
+    <div class="question-box">${escapeHTML(currentQuestion.question||"")}</div>
+    <div id="optionsArea"></div>
+    <p class="muted">Topic: ${escapeHTML(currentQuestion.topic||"")}</p>
+  `;
+
+  const optionsArea=document.getElementById("optionsArea");
+
+  if(Array.isArray(currentQuestion.options)&&currentQuestion.options.length){
+    currentQuestion.options.forEach((option,index)=>{
+      const button=document.createElement("button");
+      button.className="option";
+      button.textContent=String.fromCharCode(65+index)+". "+option;
+
+      button.onclick=()=>{
+        selectedOption=option;
+        document.getElementById("studentAnswer").value=option;
+        document.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));
+        button.classList.add("selected");
+      };
+
+      optionsArea.appendChild(button);
+    });
+  }
+
+  document.getElementById("studentAnswer").value="";
+  document.getElementById("answerArea").style.display="block";
+  document.getElementById("feedbackArea").innerHTML="";
+  document.getElementById("hintBtn").disabled=false;
+  document.getElementById("saveBtn").disabled=false;
 }
 
-function mastery(){
-  if(!profile || !profile.attempts) return 0;
-  return Math.round((profile.correct/profile.attempts)*100);
+function showHint(){
+  if(!currentHint){
+    toast("No hint is available for this question.");
+    return;
+  }
+
+  document.getElementById("feedbackArea").innerHTML=
+    `<div class="result"><strong>💡 Hint</strong><br>${escapeHTML(currentHint)}</div>`;
 }
 
-function dueDate(){
-  if(!profile || !profile.due) return "Not scheduled";
-  return profile.due;
+async function submitAnswer(){
+  if(!currentQuestion) return;
+
+  const studentAnswer=document.getElementById("studentAnswer").value.trim();
+
+  if(!studentAnswer){
+    toast("Please enter your answer.");
+    return;
+  }
+
+  const btn=document.getElementById("submitBtn");
+  btn.disabled=true;
+  btn.textContent="Evaluating...";
+
+  try{
+    const topic=document.getElementById("topic").value.trim();
+    const feedback=await callAI({
+      action:"analyze",
+      educationLevel:document.getElementById("education").value,
+      grade:document.getElementById("grade").value,
+      subject:document.getElementById("subject").value,
+      topic,
+      question:currentQuestion.question,
+      studentAnswer,
+      expectedAnswer:currentQuestion.answer || currentQuestion.correctAnswer,
+      correctAnswer:currentQuestion.answer || currentQuestion.correctAnswer,
+      explanation:currentQuestion.explanation,
+      reasoning:"",
+      confidence:document.getElementById("confidence").value,
+      learnerProfile:learnerProfile(),
+      digitalTwin:getDigitalTwin(),
+      environment:environmentData
+    });
+
+    const text=feedback.feedback || "Your answer has been evaluated.";
+    const lower=text.toLowerCase();
+
+    let result="reviewed";
+
+    if(lower.includes("partially correct")){
+      result="partial";
+    }else if(
+      lower.includes("incorrect")||
+      lower.includes("not correct")||
+      lower.includes("wrong answer")
+    ){
+      result="incorrect";
+    }else if(
+      lower.includes("correct")
+    ){
+      result="correct";
+    }
+
+    state.attempts.push({
+      question:currentQuestion.question,
+      topic,
+      subject:document.getElementById("subject").value,
+      answer:studentAnswer,
+      result,
+      feedback:text,
+      date:new Date().toISOString()
+    });
+
+    state.xp+=result==="correct"?20:result==="partial"?12:result==="incorrect"?5:10;
+
+    persist();
+    refresh();
+
+    document.getElementById("feedbackArea").innerHTML=
+      `<div class="result"><strong>🤖 AI Evaluation</strong><br><br>${escapeHTML(text)}<br><br><span class="tag green">+${result==="correct"?20:result==="partial"?12:result==="incorrect"?5:10} XP</span></div>`;
+
+    document.getElementById("submitBtn").textContent="Evaluated";
+    toast("Answer evaluated. Learner profile updated.");
+
+  }catch(error){
+    toast(error.message);
+    btn.textContent="Submit for AI Evaluation";
+  }finally{
+    btn.disabled=false;
+  }
 }
 
-function go(page){
-  document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
-  $(page).classList.remove("hidden");
+function saveQuestion(){
+  if(!currentQuestion) return;
 
-  document.querySelectorAll(".tab").forEach(t=>
-    t.classList.toggle("active",t.dataset.page===page)
+  const exists=state.saved.some(
+    q=>q.question===currentQuestion.question
   );
 
-  if(page==="revision") renderRevision();
-  if(page==="teacher") renderTeacher();
-}
-
-document.querySelectorAll(".tab").forEach(b=>
-  b.addEventListener("click",()=>go(b.dataset.page))
-);
-
-function renderAll(){
-  if(!profile){
-    $("mastery").textContent="0%";
-    $("masteryBar").style.width="0%";
-    $("attempts").textContent="0";
-    $("correct").textContent="0";
-    $("revisionStatus").textContent="New";
+  if(exists){
+    toast("This question is already saved.");
     return;
   }
 
-  const m = mastery();
+  state.saved.push({
+    ...currentQuestion,
+    savedAt:new Date().toISOString()
+  });
 
-  $("mastery").textContent=m+"%";
-  $("masteryBar").style.width=m+"%";
-  $("attempts").textContent=profile.attempts;
-  $("correct").textContent=profile.correct;
-
-  $("revisionStatus").textContent = profile.due
-    ? (new Date(profile.due+"T00:00:00")<=new Date()?"Due":"Scheduled")
-    : "New";
-
-  $("snapshot").textContent =
-    `You are practising ${$("subject").value}: ${$("topic").value} at ${$("grade").value}. Recorded accuracy is ${m}% across ${profile.attempts} attempts.`;
-
-  $("evidence").textContent = profile.history.length
-    ? profile.history.slice(0,6).map(h=>
-        `${h.date}: ${h.format} • ${h.result} • ${h.level}`
-      ).join("  |  ")
-    : "No attempts yet. Generate a question to begin building evidence.";
+  persist();
+  refresh();
+  toast("Question saved to Revision Vault.");
 }
 
-function renderRevision(){
-  if(!profile){
-    $("revisionList").textContent="Select a learning profile first.";
+function renderSaved(){
+  const list=document.getElementById("savedList");
+
+  if(!state.saved.length){
+    list.textContent="No saved questions yet.";
     return;
   }
 
-  const last = profile.history[0];
+  list.innerHTML="";
 
-  $("revisionList").innerHTML = `
-    <div class="notice">
-      Current focus: <b>${escapeHTML($("subject").value)} — ${escapeHTML($("topic").value)}</b><br>
-      Recorded accuracy: ${mastery()}% (${profile.correct}/${profile.attempts})<br>
-      Next review: ${dueDate()}<br>
-      ${last
-        ? "Latest evidence: "+escapeHTML(last.result)+" on "+escapeHTML(last.date)
-        : "No evidence recorded yet."
-      }
-    </div>`;
+  state.saved.forEach((q,index)=>{
+    const div=document.createElement("div");
+    div.className="list-item";
+
+    const name=document.createElement("span");
+    name.textContent=(index+1)+". "+q.question;
+
+    const button=document.createElement("button");
+    button.className="btn secondary";
+    button.textContent="Open";
+    button.onclick=()=>openSaved(index);
+
+    div.append(name,button);
+    list.appendChild(div);
+  });
 }
 
-function renderTeacher(){
-  if(!profile){
-    $("teacherProfile").textContent="Not set";
-    $("teacherAttempts").textContent="0";
-    $("teacherAccuracy").textContent="—";
-    $("teacherFocus").textContent="Select a learning profile first.";
+function openSaved(index){
+  const q=state.saved[index];
+  if(!q) return;
+
+  currentQuestion=q;
+  currentHint=q.hint||"";
+
+  switchTab("practice");
+  renderQuestion();
+
+  toast("Saved question opened.");
+}
+
+function loadSavedPractice(){
+  if(!state.saved.length){
+    toast("No saved questions available yet.");
     return;
   }
 
-  $("teacherProfile").textContent=$("grade").value+" • "+$("subject").value;
-  $("teacherAttempts").textContent=profile.attempts;
-  $("teacherAccuracy").textContent=profile.attempts?mastery()+"%":"—";
-
-  $("teacherFocus").textContent =
-    $("topic").value+" — "+
-    (profile.attempts<4
-      ?"More independent attempts are needed before treating this as reliable mastery evidence."
-      :"Keep practising with changed examples to check transfer and retention."
-    );
+  switchTab("revision");
 }
 
-function escapeHTML(s){
-  return String(s??"").replace(/[&<>"']/g,c=>({
+function exportData(){
+  const blob=new Blob(
+    [JSON.stringify(state,null,2)],
+    {type:"application/json"}
+  );
+
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="LearnLoop-Learner-Profile.json";
+  a.click();
+  URL.revokeObjectURL(url);
+  toast("Learner data exported.");
+}
+
+function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,char=>({
     "&":"&amp;",
     "<":"&lt;",
     ">":"&gt;",
     '"':"&quot;",
     "'":"&#39;"
-  }[c]));
+  })[char]);
 }
 
-async function generateQuestion(){
-  if(busy) return;
+/* SIMULATED IOT ENVIRONMENT */
 
-  if(!profile){
-    alert("Please set your learning profile first.");
-    return;
-  }
+function updateEnvironment(){
+  const noise=Math.round(25+Math.random()*55);
+  const brightness=Math.round(150+Math.random()*650);
+  const temperature=Math.round(20+Math.random()*15);
 
-  busy=true;
-
-  $("practiceBox").innerHTML =
-    '<div class="notice">LearnLoop AI is creating a question for your learning level…</div>';
-
-  const level = $("difficulty").value==="Adaptive"
-    ? (
-        profile.attempts<2
-          ?"Foundation"
-          :mastery()<50
-            ?"Foundation"
-            :mastery()<80
-              ?"Intermediate"
-              :"Advanced"
-      )
-    :$("difficulty").value;
-
-  const recent = profile.history.slice(0,5).map(h=>h.question);
-
-  try{
-    const response = await fetch("/.netlify/functions/analyze",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        action:"generateQuestion",
-        educationLevel:$("education").value,
-        grade:$("grade").value,
-        subject:$("subject").value,
-        topic:$("topic").value.trim(),
-        level,
-        format:$("format").value,
-        learnerProfile:{
-          mastery:mastery(),
-          attempts:profile.attempts,
-          misconception:profile.history.find(h=>h.misconception)?.misconception||"Not identified"
-        },
-        recentQuestions:recent
-      })
-    });
-
-    const data=await response.json();
-
-    if(!response.ok || !data.success || !data.question){
-      throw new Error(data.error||"Question generation failed.");
-    }
-
-    currentQuestion=data.question;
-
-    $("levelTag").textContent=level+" • "+(currentQuestion.format||$("format").value);
-
-    $("why").textContent =
-      `Selected ${level} difficulty for ${$("grade").value}. ${
-        profile.attempts<2
-          ?"A starting-level question is being used because there is not enough history yet."
-          :"Previous accuracy: "+mastery()+"%. Recent questions are supplied to reduce repetition."
-      }`;
-
-    showQuestion();
-
-  }catch(err){
-    console.error(err);
-
-    $("practiceBox").innerHTML=`
-      <div class="notice">
-        Question generation is temporarily unavailable:
-        ${escapeHTML(err.message)}.
-        Check the Netlify function deployment and try again.
-      </div>
-      <div class="actions">
-        <button onclick="generateQuestion()">Try again</button>
-      </div>`;
-  }finally{
-    busy=false;
-  }
-}
-
-function showQuestion(){
-  const q=currentQuestion;
-  const mcq=Array.isArray(q.options)&&q.options.length>=2;
-
-  const options=mcq
-    ?q.options.map((o,i)=>`
-      <label class="option">
-        <input type="radio" name="answer" value="${i}">
-        ${escapeHTML(o)}
-      </label>
-    `).join("")
-    :'<textarea id="writtenAnswer" placeholder="Write your answer here…"></textarea>';
-
-  $("practiceBox").innerHTML=`
-    <div class="muted small">
-      ${escapeHTML(q.topic||$("topic").value)}
-      • ${escapeHTML(q.format||$("format").value)}
-      • ${escapeHTML(q.level||$("difficulty").value)}
-    </div>
-
-    <div class="question">${escapeHTML(q.question)}</div>
-
-    ${options}
-
-    <div class="field">
-      <label for="reasoning">Explain your thinking (recommended)</label>
-      <textarea id="reasoning" placeholder="Explain how you reached your answer…"></textarea>
-    </div>
-
-    <div class="actions">
-      <button onclick="submitAnswer()">Submit answer</button>
-      <button class="secondary" onclick="generateQuestion()">Generate another question</button>
-    </div>
-
-    <div id="answerFeedback"></div>
-  `;
-
-  // Render mathematical formulas in the newly generated question
-  renderMath($("practiceBox"));
-}
-
-async function submitAnswer(){
-  if(!currentQuestion || busy) return;
-
-  const mcq=Array.isArray(currentQuestion.options)&&currentQuestion.options.length>=2;
-
-  let studentAnswer="";
-
-  if(mcq){
-    const chosen=document.querySelector('input[name="answer"]:checked');
-
-    if(!chosen){
-      alert("Please select an option.");
-      return;
-    }
-
-    studentAnswer=currentQuestion.options[Number(chosen.value)];
-  }else{
-    studentAnswer=$("writtenAnswer")?.value.trim()||"";
-
-    if(!studentAnswer){
-      alert("Please write your answer.");
-      return;
-    }
-  }
-
-  const reasoning=$("reasoning")?.value.trim()||"";
-  const confidence=$("confidence").value;
-
-  // Supports both possible answer field names from the AI
-  const expected=String(
-    currentQuestion.answer ?? currentQuestion.correctAnswer ?? ""
-  ).trim();
-
-  const isExact=expected
-    ?normalise(studentAnswer)===normalise(expected)
-    :false;
-
-  // Open responses are not auto-marked as correct
-  const verified=mcq?isExact:null;
-
-  busy=true;
-
-  $("answerFeedback").innerHTML =
-    '<div class="notice">Recording your attempt and asking LearnLoop AI for feedback…</div>';
-
-  const attempt={
-    date:new Date().toLocaleString(),
-    format:currentQuestion.format||$("format").value,
-    level:currentQuestion.level||$("difficulty").value,
-    question:currentQuestion.question,
-    result:verified===null?"AI review pending":verified?"Correct":"Needs review",
-    misconception:""
+  environmentData={
+    status:"SIMULATED",
+    noise,
+    brightness,
+    temperature
   };
 
-  profile.attempts++;
+  document.getElementById("noise").textContent=noise+" dB";
+  document.getElementById("brightness").textContent=brightness+" lux";
+  document.getElementById("temperature").textContent=temperature+" °C";
 
-  if(verified===true) profile.correct++;
+  let status="Comfortable";
+  let message="The simulated environment is within a reasonable range.";
+  let tip="Continue studying at a comfortable pace.";
 
-  profile.confidence[confidence].n++;
-
-  if(verified===true) profile.confidence[confidence].correct++;
-
-  profile.history.unshift(attempt);
-
-  const days=verified===true?4:1;
-  const due=new Date();
-  due.setDate(due.getDate()+days);
-  profile.due=due.toISOString().slice(0,10);
-
-  save();
-
-  try{
-    const res=await fetch("/.netlify/functions/analyze",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        action:"analyze",
-        educationLevel:$("education").value,
-        grade:$("grade").value,
-        subject:$("subject").value,
-        topic:$("subject").value+" — "+$("topic").value,
-        question:currentQuestion.question,
-        studentAnswer,
-        expectedAnswer:expected,
-        correctAnswer:expected,
-        explanation:reasoning,
-        confidence
-      })
-    });
-
-    const data=await res.json();
-
-    if(!res.ok || !data.success){
-      throw new Error(data.error||"AI analysis unavailable.");
-    }
-
-    $("answerFeedback").innerHTML="";
-
-    const box=document.createElement("div");
-    box.className="ai-feedback";
-
-    const title=document.createElement("h3");
-    title.textContent="✨ LearnLoop AI feedback";
-
-    const body=document.createElement("p");
-    body.textContent=data.feedback||"No feedback returned.";
-
-    box.append(title,body);
-    $("answerFeedback").append(box);
-
-    attempt.result=verified===null
-      ?"Reviewed by AI"
-      :verified
-        ?"Correct"
-        :"Needs review";
-
-    const transfer=currentQuestion.transferChallenge;
-
-    if(transfer){
-      const challenge=document.createElement("p");
-      challenge.textContent="Transfer challenge: "+transfer;
-      box.append(challenge);
-    }
-
-    // Render formulas in AI feedback too
-    renderMath(box);
-
-  }catch(err){
-    console.error(err);
-
-    const msg=document.createElement("div");
-    msg.className="notice";
-    msg.textContent="AI feedback is temporarily unavailable. Your attempt has still been saved locally.";
-
-    $("answerFeedback").append(msg);
-
-  }finally{
-    busy=false;
-    save();
-    renderRevision();
-  }
-}
-
-function normalise(s){
-  return String(s).toLowerCase().replace(/[.,!?°\s]/g,"").trim();
-}
-
-function exportData(){
-  if(!profile){
-    alert("Select a learning profile first.");
-    return;
+  if(noise>65){
+    status="Noisy";
+    message="The simulated sound level is relatively high.";
+    tip="Consider moving to a quieter study space if possible.";
+  }else if(brightness<250){
+    status="Low brightness";
+    message="The simulated brightness reading is relatively low.";
+    tip="Consider improving the lighting in your study area.";
+  }else if(temperature>32){
+    status="Warm";
+    message="The simulated temperature reading is high.";
+    tip="Consider a more comfortable study environment.";
   }
 
-  const blob=new Blob(
-    [JSON.stringify({profileKey,profile},null,2)],
-    {type:"application/json"}
-  );
-
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="learnloop-learner-profile.json";
-  a.click();
-
-  URL.revokeObjectURL(a.href);
+  document.getElementById("environmentStatus").textContent=status;
+  document.getElementById("environmentMessage").textContent=message;
+  document.getElementById("environmentTip").textContent=tip;
 }
 
-function resetCurrent(){
-  if(!profileKey || !profile){
-    alert("Select a learning profile first.");
-    return;
-  }
-
-  if(confirm("Reset only this selected learning profile? Other profiles and your older Physics data will remain untouched.")){
-    db[profileKey]=freshProfile();
-    profile=db[profileKey];
-    save();
-  }
+function updateConnection(){
+  const connected=navigator.onLine;
+  document.getElementById("connection").textContent=
+    connected?"● Online":"● Offline";
+  document.getElementById("connection").style.color=
+    connected?"#16885f":"#bd7130";
 }
 
-updateLevelOptions();
-renderAll();
+window.addEventListener("online",updateConnection);
+window.addEventListener("offline",updateConnection);
+
+document.getElementById("education").addEventListener("change",()=>{
+  const isCollege=document.getElementById("education").value==="College";
+  const grade=document.getElementById("grade");
+
+  grade.innerHTML=isCollege
+    ?Array.from({length:6},(_,i)=>`<option>Year ${i+1}</option>`).join("")
+    :Array.from({length:7},(_,i)=>`<option>Class ${i+6}</option>`).join("");
+});
+
+updateConnection();
+updateEnvironment();
+setInterval(updateEnvironment,5000);
+refresh();
+
 </script>
 </body>
 </html>
