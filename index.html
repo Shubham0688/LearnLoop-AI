@@ -1,45 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LearnLoop AI — Adaptive Physics Tutor</title>
+
 <style>
-:root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#68738a;--line:#e8ecf3;--blue:#4f67e8;--cyan:#dff7f4;--green:#14866d;--orange:#f0a33a;--shadow:0 12px 32px #26345b0c}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+:root{
+--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#68738a;
+--line:#e8ecf3;--blue:#4f67e8;--cyan:#dff7f4;
+--green:#14866d;--orange:#f0a33a;--shadow:0 12px 32px #26345b0c
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
 header{background:#fff;border-bottom:1px solid var(--line);padding:16px 5vw;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
-.brand{display:flex;gap:11px;align-items:center;font-weight:800;font-size:19px}.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#5368ee,#18b89b);display:grid;place-items:center;color:white;font-weight:900}
+.brand{display:flex;gap:11px;align-items:center;font-weight:800;font-size:19px}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#5368ee,#18b89b);display:grid;place-items:center;color:white;font-weight:900}
 .pill{font-size:12px;background:#eef1ff;color:#4c5ed0;padding:6px 11px;border-radius:20px;font-weight:700}
-.wrap{max-width:1160px;margin:30px auto;padding:0 20px}.hero{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:24px}.eyebrow{color:var(--blue);font-weight:800;font-size:12px;letter-spacing:1.4px;text-transform:uppercase}.hero h1{font-size:30px;line-height:1.15;margin:7px 0}.sub{color:var(--muted);max-width:640px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}.tab{border:1px solid var(--line);background:#fff;color:var(--muted);padding:10px 15px;border-radius:11px;cursor:pointer;font-weight:700}.tab.active{background:var(--ink);color:white;border-color:var(--ink)}
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow)}.span3{grid-column:span 3}.span4{grid-column:span 4}.span5{grid-column:span 5}.span7{grid-column:span 7}.span8{grid-column:span 8}.span12{grid-column:span 12}
-.metric{font-size:28px;font-weight:850;margin-top:6px}.muted{color:var(--muted)}.small{font-size:12px}.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.bar{height:9px;background:#edf0f6;border-radius:9px;overflow:hidden;margin-top:9px}.fill{height:100%;background:linear-gradient(90deg,#5368ee,#16b89a);border-radius:9px}
-button,.btn{border:0;background:var(--blue);color:#fff;padding:11px 16px;border-radius:10px;font-weight:750;cursor:pointer}.btn.secondary{background:#eef1ff;color:#4b5ed4}.btn.ghost{background:#f1f3f7;color:#46516a}.btn:disabled{opacity:.45;cursor:not-allowed}
-h2{font-size:18px;margin:0 0 14px}h3{font-size:15px;margin:0 0 8px}.topic{padding:12px 0;border-bottom:1px solid var(--line)}.topic:last-child{border:0}.tag{font-size:11px;font-weight:800;border-radius:20px;padding:4px 8px;background:#eef1ff;color:#4e60d4}.tag.good{background:#e5f7f0;color:#168467}.tag.warn{background:#fff3df;color:#a96b13}
-.question{font-size:19px;font-weight:750;margin:10px 0 18px}.option{display:block;border:1px solid var(--line);padding:12px 14px;border-radius:11px;margin:9px 0;cursor:pointer}.option:hover{border-color:#9aa7f4}.option input{margin-right:10px}.feedback{margin-top:15px;padding:14px;border-radius:12px;background:#f2f5ff}.hidden{display:none!important}textarea,input{font:inherit;border:1px solid var(--line);border-radius:10px;padding:11px;width:100%;background:#fff;color:var(--ink)}textarea{min-height:76px;resize:vertical}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.listitem{padding:12px 0;border-bottom:1px solid var(--line)}.listitem:last-child{border:0}.notice{background:#eaf8f5;border:1px solid #d4f0e9;color:#176e5b;border-radius:12px;padding:12px;font-size:13px}
+.wrap{max-width:1160px;margin:30px auto;padding:0 20px}
+.hero{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:24px}
+.eyebrow{color:var(--blue);font-weight:800;font-size:12px;letter-spacing:1.4px;text-transform:uppercase}
+.hero h1{font-size:30px;line-height:1.15;margin:7px 0}
+.sub{color:var(--muted);max-width:640px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}
+.tab{border:1px solid var(--line);background:#fff;color:var(--muted);padding:10px 15px;border-radius:11px;cursor:pointer;font-weight:700}
+.tab.active{background:var(--ink);color:white;border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow)}
+.span3{grid-column:span 3}.span4{grid-column:span 4}
+.span5{grid-column:span 5}.span7{grid-column:span 7}
+.span8{grid-column:span 8}.span12{grid-column:span 12}
+.metric{font-size:28px;font-weight:850;margin-top:6px}
+.muted{color:var(--muted)}.small{font-size:12px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.bar{height:9px;background:#edf0f6;border-radius:9px;overflow:hidden;margin-top:9px}
+.fill{height:100%;background:linear-gradient(90deg,#5368ee,#16b89a);border-radius:9px}
+button,.btn{border:0;background:var(--blue);color:#fff;padding:11px 16px;border-radius:10px;font-weight:750;cursor:pointer}
+.btn.secondary{background:#eef1ff;color:#4b5ed4}
+.btn.ghost{background:#f1f3f7;color:#46516a}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+h2{font-size:18px;margin:0 0 14px}
+h3{font-size:15px;margin:0 0 8px}
+.topic{padding:12px 0;border-bottom:1px solid var(--line)}
+.topic:last-child{border:0}
+.tag{font-size:11px;font-weight:800;border-radius:20px;padding:4px 8px;background:#eef1ff;color:#4e60d4}
+.tag.good{background:#e5f7f0;color:#168467}
+.tag.warn{background:#fff3df;color:#a96b13}
+.question{font-size:19px;font-weight:750;margin:10px 0 18px}
+.option{display:block;border:1px solid var(--line);padding:12px 14px;border-radius:11px;margin:9px 0;cursor:pointer}
+.option:hover{border-color:#9aa7f4}
+.option input{margin-right:10px;width:auto}
+.feedback{margin-top:15px;padding:14px;border-radius:12px;background:#f2f5ff}
+.ai-feedback{margin-top:15px;padding:17px;border-radius:13px;background:#eaf8f5;border:1px solid #cdeee5}
+.ai-feedback h3{color:#176e5b;margin-bottom:9px}
+.ai-feedback p{white-space:pre-wrap}
+.hidden{display:none!important}
+textarea,input,select{font:inherit;border:1px solid var(--line);border-radius:10px;padding:11px;width:100%;background:#fff;color:var(--ink)}
+textarea{min-height:76px;resize:vertical}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.listitem{padding:12px 0;border-bottom:1px solid var(--line)}
+.listitem:last-child{border:0}
+.notice{background:#eaf8f5;border:1px solid #d4f0e9;color:#176e5b;border-radius:12px;padding:12px;font-size:13px}
 footer{text-align:center;color:#8a93a6;padding:30px;font-size:12px}
-@media(max-width:760px){.hero{display:block}.hero .pill{display:inline-block;margin-top:12px}.span3,.span4,.span5,.span7,.span8{grid-column:span 12}.hero h1{font-size:25px}header{padding:12px 18px}}
-</style></head>
+@media(max-width:760px){
+.hero{display:block}
+.hero .pill{display:inline-block;margin-top:12px}
+.span3,.span4,.span5,.span7,.span8{grid-column:span 12}
+.hero h1{font-size:25px}
+header{padding:12px 18px}
+}
+</style>
+</head>
+
 <body>
-<header><div class="brand"><div class="logo">L</div>LearnLoop <span style="color:var(--blue)">AI</span></div><span class="pill">ADAPTIVE LEARNING • CLASS 10 PHYSICS</span></header>
+
+<header>
+<div class="brand">
+<div class="logo">L</div>
+LearnLoop <span style="color:var(--blue)">AI</span>
+</div>
+<span class="pill">ADAPTIVE LEARNING • CLASS 10 PHYSICS</span>
+</header>
+
 <main class="wrap">
-<section class="hero"><div><div class="eyebrow">Your personal learning companion</div><h1>Learn smarter, one concept at a time.</h1><div class="sub">A tutor that tracks concept mastery, spots common misconceptions and chooses what you should practise next.</div></div><div class="pill">⚡ Adaptive study engine</div></section>
+
+<section class="hero">
+<div>
+<div class="eyebrow">Your personal learning companion</div>
+<h1>Learn smarter, one concept at a time.</h1>
+<div class="sub">
+A tutor that tracks concept mastery, spots common misconceptions and chooses what you should practise next.
+</div>
+</div>
+<div class="pill">⚡ Adaptive study engine</div>
+</section>
+
 <nav class="tabs">
-<button class="tab active" data-page="overview">Overview</button><button class="tab" data-page="diagnostic">Diagnostic test</button><button class="tab" data-page="practice">Adaptive practice</button><button class="tab" data-page="revision">Revision plan</button><button class="tab" data-page="teacher">Teacher dashboard</button>
+<button class="tab active" data-page="overview">Overview</button>
+<button class="tab" data-page="diagnostic">Diagnostic test</button>
+<button class="tab" data-page="practice">Adaptive practice</button>
+<button class="tab" data-page="revision">Revision plan</button>
+<button class="tab" data-page="teacher">Teacher dashboard</button>
 </nav>
+
 <section id="overview" class="page">
 <div class="grid">
-<div class="card span3"><div class="muted small">OVERALL MASTERY</div><div class="metric" id="overall">0%</div><div class="bar"><div class="fill" id="overallbar" style="width:0%"></div></div></div>
-<div class="card span3"><div class="muted small">QUESTIONS ANSWERED</div><div class="metric" id="answered">0</div><div class="muted small">Across all concepts</div></div>
-<div class="card span3"><div class="muted small">CONCEPTS MASTERED</div><div class="metric" id="mastered">0/5</div><div class="muted small">Mastery score ≥ 80%</div></div>
-<div class="card span3"><div class="muted small">DUE FOR REVISION</div><div class="metric" id="due">5</div><div class="muted small">Keep your memory fresh</div></div>
-<div class="card span7"><div class="row"><h2>Concept map</h2><span class="tag">Class 10 • Physics</span></div><div id="concepts"></div></div>
-<div class="card span5"><h2>Recommended next step</h2><div id="recommend" class="notice">Take the diagnostic test to discover your starting level.</div><div class="actions"><button onclick="go('diagnostic')">Start diagnostic →</button></div><div style="margin-top:20px"><h3>How LearnLoop adapts</h3><p class="muted small">Your answer + explanation update your concept score. The tutor then selects a suitable difficulty and schedules revision.</p></div></div>
-</div></section>
-<section id="diagnostic" class="page hidden"><div class="grid"><div class="card span8"><div class="row"><h2>Diagnostic test</h2><span class="tag">5 starter questions</span></div><p class="muted">Answer one question from each concept. Your result creates your initial learner profile.</p><div id="diagbox"></div></div><div class="card span4"><h2>Test guide</h2><p class="muted small">• Choose the best answer.<br>• Read the feedback after each question.<br>• Complete all five to build your learner model.</p><div class="bar"><div id="diagbar" class="fill" style="width:0%"></div></div><p id="diagprogress" class="muted small">0 of 5 completed</p></div></div></section>
-<section id="practice" class="page hidden"><div class="grid"><div class="card span8"><div class="row"><h2>Adaptive practice</h2><span class="tag" id="leveltag">Personalised</span></div><div id="practicebox"><p class="muted">Your next question is selected using your current mastery scores.</p><button onclick="nextPractice()">Get my next question →</button></div></div><div class="card span4"><h2>Why this question?</h2><div id="why" class="notice">The tutor prioritises concepts with lower mastery and questions due for revision.</div><p class="muted small" style="margin-top:15px">Tip: Explain your thinking in your own words. This helps detect misconceptions, not just incorrect answers.</p></div></div></section>
-<section id="revision" class="page hidden"><div class="grid"><div class="card span7"><h2>Your spaced-repetition schedule</h2><p class="muted small">Correct answers increase the revision interval. Incorrect answers bring a concept back sooner.</p><div id="revisionlist"></div></div><div class="card span5"><h2>Study rhythm</h2><div class="notice">Suggested cycle: learn → practise → check understanding → revisit later.</div><div style="margin-top:18px"><h3>Progress data</h3><p class="muted small">Your learning profile is stored in this browser. You can export it for your records.</p><div class="actions"><button class="btn secondary" onclick="exportData()">Export learner data</button><button class="btn ghost" onclick="resetData()">Reset progress</button></div></div></div></div></section>
-<section id="teacher" class="page hidden"><div class="grid"><div class="card span12"><div class="row"><div><h2>Teacher dashboard</h2><p class="muted small">Illustrative class snapshot for the prototype (not real student records).</p></div><span class="tag">DEMO CLASS • 30 LEARNERS</span></div><div class="grid" id="classmetrics"></div></div><div class="card span7"><h2>Class-wide concept gaps</h2><div id="classgaps"></div></div><div class="card span5"><h2>Suggested teacher action</h2><div class="notice" id="teacheraction"></div><p class="muted small" style="margin-top:14px">In a full deployment, each learner would sign in and contribute consented, anonymised progress data.</p></div></div></section>
-</main><footer>LearnLoop AI • Working prototype • Learning support only, not an official examination tool.</footer>
+
+<div class="card span3">
+<div class="muted small">OVERALL MASTERY</div>
+<div class="metric" id="overall">0%</div>
+<div class="bar"><div class="fill" id="overallbar" style="width:0%"></div></div>
+</div>
+
+<div class="card span3">
+<div class="muted small">QUESTIONS ANSWERED</div>
+<div class="metric" id="answered">0</div>
+<div class="muted small">Across all concepts</div>
+</div>
+
+<div class="card span3">
+<div class="muted small">CONCEPTS MASTERED</div>
+<div class="metric" id="mastered">0/5</div>
+<div class="muted small">Mastery score ≥ 80%</div>
+</div>
+
+<div class="card span3">
+<div class="muted small">DUE FOR REVISION</div>
+<div class="metric" id="due">5</div>
+<div class="muted small">Keep your memory fresh</div>
+</div>
+
+<div class="card span7">
+<div class="row">
+<h2>Concept map</h2>
+<span class="tag">Class 10 • Physics</span>
+</div>
+<div id="concepts"></div>
+</div>
+
+<div class="card span5">
+<h2>Recommended next step</h2>
+<div id="recommend" class="notice">Take the diagnostic test to discover your starting level.</div>
+<div class="actions">
+<button onclick="go('diagnostic')">Start diagnostic →</button>
+</div>
+<div style="margin-top:20px">
+<h3>How LearnLoop adapts</h3>
+<p class="muted small">
+Your answer + explanation + confidence update your learning experience.
+</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<section id="diagnostic" class="page hidden">
+<div class="grid">
+<div class="card span8">
+<div class="row">
+<h2>Diagnostic test</h2>
+<span class="tag">5 starter questions</span>
+</div>
+<p class="muted">Answer one question from each concept. Your result creates your initial learner profile.</p>
+<div id="diagbox"></div>
+</div>
+
+<div class="card span4">
+<h2>Test guide</h2>
+<p class="muted small">
+• Choose the best answer.<br>
+• Read the feedback after each question.<br>
+• Complete all five to build your learner model.
+</p>
+<div class="bar"><div id="diagbar" class="fill" style="width:0%"></div></div>
+<p id="diagprogress" class="muted small">0 of 5 completed</p>
+</div>
+</div>
+</section>
+
+<section id="practice" class="page hidden">
+<div class="grid">
+
+<div class="card span8">
+<div class="row">
+<h2>Adaptive practice</h2>
+<span class="tag" id="leveltag">Personalised</span>
+</div>
+<div id="practicebox">
+<p class="muted">Your next question is selected using your current mastery scores.</p>
+<button onclick="nextPractice()">Get my next question →</button>
+</div>
+</div>
+
+<div class="card span4">
+<h2>Why this question?</h2>
+<div id="why" class="notice">
+The tutor prioritises concepts with lower mastery and questions due for revision.
+</div>
+<p class="muted small" style="margin-top:15px">
+Tip: Explain your thinking in your own words. This helps detect misconceptions, not just incorrect answers.
+</p>
+</div>
+
+</div>
+</section>
+
+<section id="revision" class="page hidden">
+<div class="grid">
+
+<div class="card span7">
+<h2>Your spaced-repetition schedule</h2>
+<p class="muted small">Correct answers increase the revision interval. Incorrect answers bring a concept back sooner.</p>
+<div id="revisionlist"></div>
+</div>
+
+<div class="card span5">
+<h2>Study rhythm</h2>
+<div class="notice">Suggested cycle: learn → practise → check understanding → revisit later.</div>
+<div style="margin-top:18px">
+<h3>Progress data</h3>
+<p class="muted small">Your learning profile is stored in this browser. You can export it for your records.</p>
+<div class="actions">
+<button class="btn secondary" onclick="exportData()">Export learner data</button>
+<button class="btn ghost" onclick="resetData()">Reset progress</button>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<section id="teacher" class="page hidden">
+<div class="grid">
+
+<div class="card span12">
+<div class="row">
+<div>
+<h2>Teacher dashboard</h2>
+<p class="muted small">Illustrative class snapshot for the prototype (not real student records).</p>
+</div>
+<span class="tag">DEMO CLASS • 30 LEARNERS</span>
+</div>
+<div class="grid" id="classmetrics"></div>
+</div>
+
+<div class="card span7">
+<h2>Class-wide concept gaps</h2>
+<div id="classgaps"></div>
+</div>
+
+<div class="card span5">
+<h2>Suggested teacher action</h2>
+<div class="notice" id="teacheraction"></div>
+<p class="muted small" style="margin-top:14px">
+In a full deployment, each learner would sign in and contribute consented, anonymised progress data.
+</p>
+</div>
+
+</div>
+</section>
+
+</main>
+
+<footer>
+LearnLoop AI • AI-powered adaptive learning prototype • Learning support only, not an official examination tool.
+</footer>
+
 <script>
+
 const topics=[
 {name:"Light — Reflection & Refraction",short:"Light",desc:"Laws of reflection, refraction and lenses"},
 {name:"Human Eye & Colourful World",short:"Human Eye",desc:"Accommodation, defects of vision and dispersion"},
@@ -47,37 +276,512 @@ const topics=[
 {name:"Magnetic Effects of Current",short:"Magnetism",desc:"Magnetic fields and electromagnets"},
 {name:"Sources of Energy",short:"Energy",desc:"Renewable and non-renewable sources"}
 ];
+
 const bank=[
 {topic:0,q:"The angle of incidence is 35°. What is the angle of reflection on a plane mirror?",opts:["25°","35°","55°","70°"],a:1,why:"The law of reflection states that angle of incidence equals angle of reflection.",mis:"You may be adding the two angles instead of applying the law i = r.",level:1},
+
 {topic:1,q:"Which part of the eye controls the amount of light entering it?",opts:["Retina","Iris","Optic nerve","Cornea"],a:1,why:"The iris adjusts the size of the pupil and controls incoming light.",mis:"The retina detects light; the iris controls how much light enters.",level:1},
+
 {topic:2,q:"A 10 Ω resistor is connected to a 5 V battery. What current flows?",opts:["0.5 A","2 A","5 A","50 A"],a:0,why:"Using Ohm’s law, I = V/R = 5/10 = 0.5 A.",mis:"Check whether you used I = V/R rather than multiplying V and R.",level:1},
+
 {topic:3,q:"The magnetic field lines around a straight current-carrying wire are:",opts:["Straight parallel lines","Concentric circles","Radial lines","Random curves"],a:1,why:"The magnetic field forms concentric circles around a straight current-carrying conductor.",mis:"Remember the shape around a straight wire is circular, not straight.",level:1},
+
 {topic:4,q:"Which of these is a renewable source of energy?",opts:["Coal","Petroleum","Solar energy","Natural gas"],a:2,why:"Solar energy is naturally replenished and is renewable.",mis:"Fossil fuels take millions of years to form; sunlight is replenished continuously.",level:1},
+
 {topic:2,q:"If voltage stays constant and resistance doubles, current will:",opts:["Double","Become half","Stay the same","Become zero"],a:1,why:"From I = V/R, doubling resistance halves the current when voltage is fixed.",mis:"Current and resistance are inversely related at constant voltage.",level:2},
+
 {topic:0,q:"A ray travels from air into glass. It generally bends:",opts:["Away from the normal","Towards the normal","Along the surface","It does not bend"],a:1,why:"Light slows down in glass and bends towards the normal when entering a denser medium.",mis:"When light enters a denser medium, it bends towards the normal.",level:2},
+
 {topic:1,q:"A person can see nearby objects clearly but distant objects are blurred. This defect is:",opts:["Hypermetropia","Myopia","Presbyopia","Cataract"],a:1,why:"Myopia is corrected using a concave lens.",mis:"Myopia affects distant vision; hypermetropia affects near vision.",level:2},
+
 {topic:3,q:"Which rule gives the direction of force on a current-carrying conductor in a magnetic field?",opts:["Right-hand thumb rule","Fleming’s left-hand rule","Snell’s law","Ohm’s law"],a:1,why:"Fleming’s left-hand rule relates magnetic field, current and force.",mis:"The right-hand thumb rule gives field direction around a wire, not motor force.",level:2},
+
 {topic:4,q:"A good fuel should ideally have:",opts:["Low calorific value","High smoke production","High calorific value and low pollution","Very high ash content"],a:2,why:"A useful fuel releases substantial energy while causing less pollution.",mis:"Fuel quality includes energy output as well as environmental impact.",level:2}
 ];
-const fresh=()=>({scores:[0,0,0,0,0],attempts:[0,0,0,0,0],correct:[0,0,0,0,0],due:topics.map(()=>new Date().toISOString().slice(0,10)),doneDiag:[],seen:[],history:[]});
-let state;try{state=JSON.parse(localStorage.getItem("learnloop-state"))||fresh()}catch{state=fresh()}
-let diagIndex=0,diagAnswers=[],current=null,practiceCount=0;
-function save(){localStorage.setItem("learnloop-state",JSON.stringify(state));render()}
-function mastery(i){return state.attempts[i]?Math.round(state.scores[i]):0}
-function totalAnswered(){return state.attempts.reduce((a,b)=>a+b,0)}
-function dueCount(){let today=new Date().toISOString().slice(0,10);return state.due.filter(d=>d<=today).length}
-function go(p){document.querySelectorAll(".page").forEach(x=>x.classList.add("hidden"));document.getElementById(p).classList.remove("hidden");document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.page===p));if(p==="teacher")renderTeacher();if(p==="revision")renderRevision();if(p==="diagnostic")renderDiag()}
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>go(b.dataset.page));
-function render(){let avg=Math.round(state.scores.reduce((a,b)=>a+b,0)/5);document.getElementById("overall").textContent=avg+"%";document.getElementById("overallbar").style.width=avg+"%";document.getElementById("answered").textContent=totalAnswered();document.getElementById("mastered").textContent=state.scores.filter(x=>x>=80).length+"/5";document.getElementById("due").textContent=dueCount();document.getElementById("concepts").innerHTML=topics.map((t,i)=>`<div class="topic"><div class="row"><div><b>${t.short}</b><div class="muted small">${t.desc}</div></div><span class="tag ${mastery(i)>=80?'good':mastery(i)<40?'warn':''}">${mastery(i)}%</span></div><div class="bar"><div class="fill" style="width:${mastery(i)}%"></div></div></div>`).join("");let weakest=topics.map((t,i)=>({t,i,s:mastery(i)})).sort((a,b)=>a.s-b.s)[0];document.getElementById("recommend").textContent=totalAnswered()===0?"Take the diagnostic test to discover your starting level.":`Focus next on ${weakest.t.short} (${weakest.s}% mastery). The practice engine will start with an appropriate question.`;renderDiag()}
-function renderDiag(){let box=document.getElementById("diagbox");if(state.doneDiag.length>=5){box.innerHTML='<div class="notice">Diagnostic complete! Your learner profile has been created. Move to Adaptive practice for personalised questions.</div><div class="actions"><button onclick="go(\'practice\')">Start adaptive practice →</button></div>';document.getElementById("diagbar").style.width="100%";document.getElementById("diagprogress").textContent="5 of 5 completed";return}
-let idx=state.doneDiag.length;let q=bank[idx];document.getElementById("diagbar").style.width=(idx/5*100)+"%";document.getElementById("diagprogress").textContent=idx+" of 5 completed";box.innerHTML=`<div class="muted small">QUESTION ${idx+1} OF 5 • ${topics[q.topic].short}</div><div class="question">${q.q}</div>${q.opts.map((o,i)=>`<label class="option"><input type="radio" name="diag" value="${i}">${o}</label>`).join("")}<div class="actions"><button onclick="submitDiag(${idx})">Check answer</button></div><div id="diagfeedback"></div>`}
-function submitDiag(idx){let selected=document.querySelector('input[name="diag"]:checked');if(!selected){alert("Please select an answer.");return}let q=bank[idx],ok=+selected.value===q.a;updateLearner(q,ok,"");state.doneDiag.push(idx);document.getElementById("diagfeedback").innerHTML=`<div class="feedback"><b>${ok?"Correct!":"Not quite."}</b> ${q.why}</div><div class="actions"><button onclick="renderDiag()">Continue</button></div>`;document.querySelectorAll('#diagbox input,#diagbox button').forEach(x=>x.disabled=true);save()}
-function updateLearner(q,ok,reason){let i=q.topic;state.attempts[i]++;if(ok)state.correct[i]++;let old=state.scores[i];let target=ok?Math.min(100,old+Math.max(12,25-state.attempts[i]*2)):Math.max(0,old-12);state.scores[i]=Math.round((old*(state.attempts[i]-1)+target)/state.attempts[i]);let days=ok?(state.scores[i]>=80?7:3):1;let d=new Date();d.setDate(d.getDate()+days);state.due[i]=d.toISOString().slice(0,10);state.history.unshift({topic:i,ok,date:new Date().toLocaleDateString(),reason:reason||""});}
-function nextPractice(){let today=new Date().toISOString().slice(0,10);let ranked=topics.map((t,i)=>({i,score:mastery(i),due:state.due[i]<=today})).sort((a,b)=>(a.score+(a.due?-25:0))-(b.score+(b.due?-25:0)));let topic=ranked[0].i;let candidates=bank.filter(q=>q.topic===topic&&!state.seen.includes(bank.indexOf(q)));if(!candidates.length)candidates=bank.filter(q=>q.topic===topic);current=bank.indexOf(candidates[0]||bank.find(q=>q.topic===topic));let q=bank[current];let level=mastery(topic)<40?1:mastery(topic)<75?2:2;let why=ranked[0].due?"This concept is due for revision and has one of your lower mastery scores.":"This is currently one of your least-mastered concepts.";document.getElementById("why").textContent=why;document.getElementById("leveltag").textContent="Level "+level+" • "+topics[topic].short;document.getElementById("practicebox").innerHTML=`<div class="muted small">${topics[topic].short.toUpperCase()} • ${level===1?"FOUNDATION":"APPLICATION"}</div><div class="question">${q.q}</div>${q.opts.map((o,i)=>`<label class="option"><input type="radio" name="prac" value="${i}">${o}</label>`).join("")}<h3 style="margin-top:16px">Explain your thinking (optional but recommended)</h3><textarea id="reason" placeholder="Write one sentence about how you chose your answer..."></textarea><div class="actions"><button onclick="submitPractice()">Submit answer</button></div><div id="pracfeedback"></div>`;state.seen.push(current)}
-function submitPractice(){let s=document.querySelector('input[name="prac"]:checked');if(!s){alert("Please select an answer.");return}let q=bank[current],ok=+s.value===q.a,reason=document.getElementById("reason").value.toLowerCase();let misconception="";if(!ok){if(reason.includes("multiply")||reason.includes("times"))misconception="Possible misconception: you may be multiplying values where a ratio or rule is needed.";else if(reason.includes("add")||reason.includes("plus"))misconception="Possible misconception: you may be adding quantities that should be related by a scientific law.";else misconception=q.mis;}updateLearner(q,ok,misconception);document.getElementById("pracfeedback").innerHTML=`<div class="feedback"><b>${ok?"Correct — good work!":"Let's fix the concept."}</b><p>${q.why}</p>${misconception?`<p><b>Misconception check:</b> ${misconception}</p>`:""}<p class="small muted">Updated mastery: ${mastery(q.topic)}%. Next revision: ${state.due[q.topic]}.</p></div><div class="actions"><button onclick="nextPractice()">Next adaptive question →</button></div>`;document.querySelectorAll('#practicebox input,#practicebox textarea,#practicebox button').forEach(x=>x.disabled=true);save()}
-function renderRevision(){document.getElementById("revisionlist").innerHTML=topics.map((t,i)=>`<div class="listitem row"><div><b>${t.short}</b><div class="muted small">Mastery ${mastery(i)}% • ${state.attempts[i]} attempts</div></div><div style="text-align:right"><span class="tag ${state.due[i]<=new Date().toISOString().slice(0,10)?'warn':'good'}">${state.due[i]<=new Date().toISOString().slice(0,10)?"Due now":"Scheduled"}</span><div class="muted small">${state.due[i]}</div></div></div>`).join("")}
-function renderTeacher(){let data=[{n:"Light",v:46},{n:"Human Eye",v:61},{n:"Electricity",v:39},{n:"Magnetism",v:54},{n:"Energy",v:72}];document.getElementById("classmetrics").innerHTML=[["Learners enrolled","30"],["Average mastery","54%"],["Priority gaps","2 concepts"]].map(x=>`<div class="card span4"><div class="muted small">${x[0].toUpperCase()}</div><div class="metric">${x[1]}</div></div>`).join("");document.getElementById("classgaps").innerHTML=data.map(x=>`<div class="topic"><div class="row"><b>${x.n}</b><span class="tag ${x.v<50?'warn':'good'}">${x.v}% avg.</span></div><div class="bar"><div class="fill" style="width:${x.v}%"></div></div></div>`).join("");document.getElementById("teacheraction").textContent="Re-teach Electricity first (lowest class mastery), then assign a short Ohm’s law practice set. Follow up with Light and refraction."}
-function exportData(){let blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="learnloop-learner-profile.json";a.click();URL.revokeObjectURL(a.href)}
-function resetData(){if(confirm("Reset all progress on this browser?")){state=fresh();save();renderRevision();renderDiag()}}
+
+const fresh=()=>({
+scores:[0,0,0,0,0],
+attempts:[0,0,0,0,0],
+correct:[0,0,0,0,0],
+due:topics.map(()=>new Date().toISOString().slice(0,10)),
+doneDiag:[],
+seen:[],
+history:[]
+});
+
+let state;
+
+try{
+state=JSON.parse(localStorage.getItem("learnloop-state"))||fresh();
+}catch{
+state=fresh();
+}
+
+let diagIndex=0;
+let current=null;
+
+function save(){
+localStorage.setItem("learnloop-state",JSON.stringify(state));
 render();
-</script></body></html>
+}
+
+function mastery(i){
+return state.attempts[i]?Math.round(state.scores[i]):0;
+}
+
+function totalAnswered(){
+return state.attempts.reduce((a,b)=>a+b,0);
+}
+
+function dueCount(){
+let today=new Date().toISOString().slice(0,10);
+return state.due.filter(d=>d<=today).length;
+}
+
+function go(p){
+document.querySelectorAll(".page").forEach(x=>x.classList.add("hidden"));
+document.getElementById(p).classList.remove("hidden");
+
+document.querySelectorAll(".tab").forEach(x=>
+x.classList.toggle("active",x.dataset.page===p)
+);
+
+if(p==="teacher")renderTeacher();
+if(p==="revision")renderRevision();
+if(p==="diagnostic")renderDiag();
+}
+
+document.querySelectorAll(".tab").forEach(b=>
+b.onclick=()=>go(b.dataset.page)
+);
+
+function render(){
+
+let avg=Math.round(state.scores.reduce((a,b)=>a+b,0)/5);
+
+document.getElementById("overall").textContent=avg+"%";
+document.getElementById("overallbar").style.width=avg+"%";
+document.getElementById("answered").textContent=totalAnswered();
+document.getElementById("mastered").textContent=
+state.scores.filter(x=>x>=80).length+"/5";
+
+document.getElementById("due").textContent=dueCount();
+
+document.getElementById("concepts").innerHTML=
+topics.map((t,i)=>`
+<div class="topic">
+<div class="row">
+<div>
+<b>${t.short}</b>
+<div class="muted small">${t.desc}</div>
+</div>
+<span class="tag ${mastery(i)>=80?'good':mastery(i)<40?'warn':''}">
+${mastery(i)}%
+</span>
+</div>
+<div class="bar">
+<div class="fill" style="width:${mastery(i)}%"></div>
+</div>
+</div>
+`).join("");
+
+let weakest=topics.map((t,i)=>({t,i,s:mastery(i)}))
+.sort((a,b)=>a.s-b.s)[0];
+
+document.getElementById("recommend").textContent=
+totalAnswered()===0
+?"Take the diagnostic test to discover your starting level."
+:`Focus next on ${weakest.t.short} (${weakest.s}% mastery). The practice engine will start with an appropriate question.`;
+
+renderDiag();
+}
+
+function renderDiag(){
+
+let box=document.getElementById("diagbox");
+
+if(state.doneDiag.length>=5){
+
+box.innerHTML=`
+<div class="notice">
+Diagnostic complete! Your learner profile has been created.
+Move to Adaptive practice for personalised questions.
+</div>
+<div class="actions">
+<button onclick="go('practice')">Start adaptive practice →</button>
+</div>
+`;
+
+document.getElementById("diagbar").style.width="100%";
+document.getElementById("diagprogress").textContent="5 of 5 completed";
+return;
+}
+
+let idx=state.doneDiag.length;
+let q=bank[idx];
+
+document.getElementById("diagbar").style.width=(idx/5*100)+"%";
+document.getElementById("diagprogress").textContent=idx+" of 5 completed";
+
+box.innerHTML=`
+<div class="muted small">QUESTION ${idx+1} OF 5 • ${topics[q.topic].short}</div>
+<div class="question">${q.q}</div>
+${q.opts.map((o,i)=>`
+<label class="option">
+<input type="radio" name="diag" value="${i}">${o}
+</label>
+`).join("")}
+<div class="actions">
+<button onclick="submitDiag(${idx})">Check answer</button>
+</div>
+<div id="diagfeedback"></div>
+`;
+}
+
+function submitDiag(idx){
+
+let selected=document.querySelector('input[name="diag"]:checked');
+
+if(!selected){
+alert("Please select an answer.");
+return;
+}
+
+let q=bank[idx];
+let ok=+selected.value===q.a;
+
+updateLearner(q,ok,"");
+state.doneDiag.push(idx);
+
+document.getElementById("diagfeedback").innerHTML=`
+<div class="feedback">
+<b>${ok?"Correct!":"Not quite."}</b> ${q.why}
+</div>
+<div class="actions">
+<button onclick="renderDiag()">Continue</button>
+</div>
+`;
+
+document.querySelectorAll('#diagbox input,#diagbox button')
+.forEach(x=>x.disabled=true);
+
+save();
+}
+
+function updateLearner(q,ok,reason){
+
+let i=q.topic;
+
+state.attempts[i]++;
+
+if(ok)state.correct[i]++;
+
+let old=state.scores[i];
+
+let target=ok
+?Math.min(100,old+Math.max(12,25-state.attempts[i]*2))
+:Math.max(0,old-12);
+
+state.scores[i]=Math.round(
+(old*(state.attempts[i]-1)+target)/state.attempts[i]
+);
+
+let days=ok?(state.scores[i]>=80?7:3):1;
+
+let d=new Date();
+d.setDate(d.getDate()+days);
+
+state.due[i]=d.toISOString().slice(0,10);
+
+state.history.unshift({
+topic:i,
+ok,
+date:new Date().toLocaleDateString(),
+reason:reason||""
+});
+}
+
+function nextPractice(){
+
+let today=new Date().toISOString().slice(0,10);
+
+let ranked=topics.map((t,i)=>({
+i,
+score:mastery(i),
+due:state.due[i]<=today
+})).sort((a,b)=>
+(a.score+(a.due?-25:0))-(b.score+(b.due?-25:0))
+);
+
+let topic=ranked[0].i;
+
+let candidates=bank.filter(q=>
+q.topic===topic&&!state.seen.includes(bank.indexOf(q))
+);
+
+if(!candidates.length){
+candidates=bank.filter(q=>q.topic===topic);
+}
+
+current=bank.indexOf(candidates[0]||bank.find(q=>q.topic===topic));
+
+let q=bank[current];
+
+let level=mastery(topic)<40?1:2;
+
+let why=ranked[0].due
+?"This concept is due for revision and has one of your lower mastery scores."
+:"This is currently one of your least-mastered concepts.";
+
+document.getElementById("why").textContent=why;
+
+document.getElementById("leveltag").textContent=
+"Level "+level+" • "+topics[topic].short;
+
+document.getElementById("practicebox").innerHTML=`
+
+<div class="muted small">
+${topics[topic].short.toUpperCase()} • ${level===1?"FOUNDATION":"APPLICATION"}
+</div>
+
+<div class="question">${q.q}</div>
+
+${q.opts.map((o,i)=>`
+<label class="option">
+<input type="radio" name="prac" value="${i}">${o}
+</label>
+`).join("")}
+
+<h3 style="margin-top:16px">Explain your thinking</h3>
+
+<textarea id="reason"
+placeholder="Write one sentence about how you chose your answer..."></textarea>
+
+<h3 style="margin-top:16px">How confident are you?</h3>
+
+<select id="confidence">
+<option value="High">Very confident</option>
+<option value="Medium" selected>Somewhat confident</option>
+<option value="Low">Not confident</option>
+</select>
+
+<div class="actions">
+<button onclick="submitPractice()">Submit answer</button>
+</div>
+
+<div id="pracfeedback"></div>
+`;
+
+state.seen.push(current);
+}
+
+async function submitPractice(){
+
+let selected=document.querySelector('input[name="prac"]:checked');
+
+if(!selected){
+alert("Please select an answer.");
+return;
+}
+
+let q=bank[current];
+
+let studentAnswer=q.opts[+selected.value];
+let ok=+selected.value===q.a;
+
+let reason=document.getElementById("reason").value.trim();
+let confidence=document.getElementById("confidence").value;
+
+let misconception="";
+
+if(!ok){
+
+if(reason.toLowerCase().includes("multiply")||
+reason.toLowerCase().includes("times")){
+
+misconception="Possible misconception: you may be multiplying values where a ratio or rule is needed.";
+
+}else if(reason.toLowerCase().includes("add")||
+reason.toLowerCase().includes("plus")){
+
+misconception="Possible misconception: you may be adding quantities that should be related by a scientific law.";
+
+}else{
+
+misconception=q.mis;
+}
+}
+
+updateLearner(q,ok,misconception);
+
+document.getElementById("pracfeedback").innerHTML=`
+
+<div class="feedback">
+<b>${ok?"Correct — good work!":"Let's fix the concept."}</b>
+<p>${q.why}</p>
+${misconception?`<p><b>Misconception check:</b> ${misconception}</p>`:""}
+<p class="small muted">
+Updated mastery: ${mastery(q.topic)}%.
+Next revision: ${state.due[q.topic]}.
+</p>
+</div>
+
+<div class="ai-feedback" id="aiFeedback">
+<h3>✨ LearnLoop AI Analysis</h3>
+<p id="aiStatus">AI is analysing your answer, explanation and confidence...</p>
+</div>
+
+<div class="actions">
+<button onclick="nextPractice()">Next adaptive question →</button>
+</div>
+`;
+
+document.querySelectorAll(
+'#practicebox input,#practicebox textarea,#practicebox select'
+).forEach(x=>x.disabled=true);
+
+document.querySelector('#practicebox button').disabled=true;
+
+save();
+
+// Send the student's response to the secure Netlify function.
+await getAIAnalysis({
+topic:topics[q.topic].short,
+question:q.q,
+studentAnswer:studentAnswer,
+correctAnswer:q.opts[q.a],
+explanation:reason,
+confidence:confidence
+});
+}
+
+async function getAIAnalysis(studentData){
+
+let status=document.getElementById("aiStatus");
+
+try{
+
+let response=await fetch("/.netlify/functions/analyze",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(studentData)
+});
+
+let data=await response.json();
+
+if(!response.ok||!data.success){
+throw new Error(data.error||"AI analysis unavailable.");
+}
+
+// Display AI-generated feedback safely as text.
+status.textContent=data.feedback||"No AI feedback was generated.";
+
+}catch(error){
+
+console.error("AI analysis error:",error);
+
+status.textContent=
+"AI feedback is temporarily unavailable. Your answer has still been saved in your learner profile. Please try again later.";
+}
+}
+
+function renderRevision(){
+
+document.getElementById("revisionlist").innerHTML=
+topics.map((t,i)=>`
+
+<div class="listitem row">
+<div>
+<b>${t.short}</b>
+<div class="muted small">
+Mastery ${mastery(i)}% • ${state.attempts[i]} attempts
+</div>
+</div>
+
+<div style="text-align:right">
+<span class="tag ${state.due[i]<=new Date().toISOString().slice(0,10)?'warn':'good'}">
+${state.due[i]<=new Date().toISOString().slice(0,10)?"Due now":"Scheduled"}
+</span>
+<div class="muted small">${state.due[i]}</div>
+</div>
+</div>
+
+`).join("");
+}
+
+function renderTeacher(){
+
+let data=[
+{n:"Light",v:46},
+{n:"Human Eye",v:61},
+{n:"Electricity",v:39},
+{n:"Magnetism",v:54},
+{n:"Energy",v:72}
+];
+
+document.getElementById("classmetrics").innerHTML=
+[
+["Learners enrolled","30"],
+["Average mastery","54%"],
+["Priority gaps","2 concepts"]
+].map(x=>`
+
+<div class="card span4">
+<div class="muted small">${x[0].toUpperCase()}</div>
+<div class="metric">${x[1]}</div>
+</div>
+
+`).join("");
+
+document.getElementById("classgaps").innerHTML=
+data.map(x=>`
+
+<div class="topic">
+<div class="row">
+<b>${x.n}</b>
+<span class="tag ${x.v<50?'warn':'good'}">${x.v}% avg.</span>
+</div>
+<div class="bar">
+<div class="fill" style="width:${x.v}%"></div>
+</div>
+</div>
+
+`).join("");
+
+document.getElementById("teacheraction").textContent=
+"Re-teach Electricity first (lowest class mastery), then assign a short Ohm’s law practice set. Follow up with Light and refraction.";
+}
+
+function exportData(){
+
+let blob=new Blob(
+[JSON.stringify(state,null,2)],
+{type:"application/json"}
+);
+
+let a=document.createElement("a");
+
+a.href=URL.createObjectURL(blob);
+a.download="learnloop-learner-profile.json";
+a.click();
+
+URL.revokeObjectURL(a.href);
+}
+
+function resetData(){
+
+if(confirm("Reset all progress on this browser?")){
+state=fresh();
+save();
+renderRevision();
+renderDiag();
+}
+}
+
+render();
+
+</script>
+</body>
+</html>
